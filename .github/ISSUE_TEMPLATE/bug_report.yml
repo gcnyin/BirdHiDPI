@@ -1,0 +1,110 @@
+name: Bug report
+description: Report a reproducible Bird HiDPI problem.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Safety check
+      options:
+        - label: I saved my work and understand that this project uses private macOS display APIs.
+          required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Bird HiDPI version
+      placeholder: "1.0.0 or commit SHA"
+    validations:
+      required: true
+
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS version
+      description: Include the build number when possible.
+      placeholder: "macOS 15.5 (24F74)"
+    validations:
+      required: true
+
+  - type: input
+    id: mac
+    attributes:
+      label: Mac model and chip
+      placeholder: "MacBook Pro 14-inch, Apple M3 Pro"
+    validations:
+      required: true
+
+  - type: input
+    id: display
+    attributes:
+      label: Display model
+      placeholder: "Manufacturer and exact model"
+    validations:
+      required: true
+
+  - type: input
+    id: connection
+    attributes:
+      label: Connection path
+      description: Include the cable, dock, adapter, and port type.
+      placeholder: "USB-C to DisplayPort through ..."
+    validations:
+      required: true
+
+  - type: input
+    id: modes
+    attributes:
+      label: Original and target modes
+      description: Include logical resolution, framebuffer size, and refresh rate.
+      placeholder: "2560x1440 Standard 120 Hz -> 1920x1080 HiDPI / 3840x2160 120 Hz"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the menu bar panel
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: result
+    attributes:
+      label: Actual result
+      description: Include the complete in-app error message and whether the screen went blank or the layout changed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+
+  - type: dropdown
+    id: recovery
+    attributes:
+      label: Recovery
+      description: What restored the display?
+      options:
+        - The app restored it automatically
+        - Clicking Restore
+        - Reconnecting the display
+        - Logging out and back in
+        - Restarting the Mac
+        - The issue is still active
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Remove serial numbers, account names, and personal data before attaching diagnostics.

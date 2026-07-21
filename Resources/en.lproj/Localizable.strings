@@ -1,0 +1,42 @@
+"common.ok" = "OK";
+"error.unknown" = "Unknown error";
+
+"header.title" = "Display Modes";
+"header.subtitle.inactive" = "External display scaling";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Native %@ · %@";
+"field.rendering" = "Rendering";
+"field.resolution" = "Resolution";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Standard";
+"output.framebuffer" = "%@ framebuffer";
+"status.active" = "Active";
+"status.applying" = "Applying";
+"status.current" = "Current";
+"status.output" = "Selected output";
+"status.systemMode" = "macOS system mode";
+
+"action.refresh" = "Refresh displays";
+"action.apply" = "Apply";
+"action.restore" = "Restore";
+"action.openDisplaySettings" = "Open Display Settings";
+"action.displaySettings" = "Display Settings";
+"action.quit" = "Quit";
+"setting.launchAtLogin" = "Launch at Login";
+"setting.language" = "Language";
+"language.automatic" = "Automatic (System)";
+"language.english" = "English";
+"language.simplifiedChinese" = "Simplified Chinese";
+"empty.noCompatibleDisplay" = "No external display detected";
+
+"error.launchAtLogin" = "Could not update Launch at Login: %@";
+"error.currentModeUnavailable" = "Could not read the current display mode.";
+"error.nativeModeUnavailable" = "%@ %@ is no longer available from macOS.";
+"error.coreGraphics" = "Display mode switch failed (CoreGraphics %ld).";
+"error.verification" = "The mode switch was not verified and the previous mode was restored: %@";
+
+"verification.displayUnavailable" = "The physical display disappeared";
+"verification.nativeMode" = "macOS selected %ldx%ld / %ldx%ld instead";
+"verification.layoutChanged" = "The display arrangement changed";
+"verification.displaySetChanged" = "The connected display set changed";
+"display.fallbackName" = "External display %u";

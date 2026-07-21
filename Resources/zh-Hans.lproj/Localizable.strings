@@ -1,0 +1,42 @@
+"common.ok" = "好";
+"error.unknown" = "未知错误";
+
+"header.title" = "显示模式";
+"header.subtitle.inactive" = "外接显示器缩放";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "原生 %@ · %@";
+"field.rendering" = "渲染模式";
+"field.resolution" = "分辨率";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "标准";
+"output.framebuffer" = "%@ 帧缓冲区";
+"status.active" = "已应用";
+"status.applying" = "正在应用";
+"status.current" = "当前模式";
+"status.output" = "已选输出";
+"status.systemMode" = "macOS 系统模式";
+
+"action.refresh" = "刷新显示器";
+"action.apply" = "应用";
+"action.restore" = "恢复";
+"action.openDisplaySettings" = "打开显示器设置";
+"action.displaySettings" = "显示器设置";
+"action.quit" = "退出";
+"setting.launchAtLogin" = "登录时启动";
+"setting.language" = "语言";
+"language.automatic" = "自动（跟随系统）";
+"language.english" = "English";
+"language.simplifiedChinese" = "简体中文";
+"empty.noCompatibleDisplay" = "未检测到外接显示器";
+
+"error.launchAtLogin" = "无法更新登录启动设置：%@";
+"error.currentModeUnavailable" = "无法读取当前显示模式。";
+"error.nativeModeUnavailable" = "macOS 已不再提供 %@ %@。";
+"error.coreGraphics" = "显示模式切换失败（CoreGraphics %ld）。";
+"error.verification" = "模式切换未通过验证，已恢复先前模式：%@";
+
+"verification.displayUnavailable" = "物理显示器已断开";
+"verification.nativeMode" = "macOS 实际选择了 %ldx%ld / %ldx%ld";
+"verification.layoutChanged" = "显示器排列发生变化";
+"verification.displaySetChanged" = "已连接的显示器集合发生变化";
+"display.fallbackName" = "外接显示器 %u";

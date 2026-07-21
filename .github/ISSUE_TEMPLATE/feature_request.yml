@@ -1,0 +1,39 @@
+name: Feature request
+description: Suggest an improvement that fits the physical-display mode-switching scope.
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow or limitation are you trying to address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the expected behavior and user interface.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+
+  - type: checkboxes
+    attributes:
+      label: Project scope
+      options:
+        - label: This request does not require a virtual display, display override, EDID modification, capture stream, privileged helper, or administrator permission.
+          required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots or examples are welcome. Remove personal information first.
