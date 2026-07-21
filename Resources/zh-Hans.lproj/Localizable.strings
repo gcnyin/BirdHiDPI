@@ -25,8 +25,6 @@
 "setting.launchAtLogin" = "登录时启动";
 "setting.language" = "语言";
 "language.automatic" = "自动（跟随系统）";
-"language.english" = "English";
-"language.simplifiedChinese" = "简体中文";
 "empty.noCompatibleDisplay" = "未检测到外接显示器";
 
 "error.launchAtLogin" = "无法更新登录启动设置：%@";

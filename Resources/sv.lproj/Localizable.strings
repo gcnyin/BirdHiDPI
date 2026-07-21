@@ -1,0 +1,40 @@
+"common.ok" = "OK";
+"error.unknown" = "Okänt fel";
+
+"header.title" = "Bildskärmslägen";
+"header.subtitle.inactive" = "Skalning av extern bildskärm";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Ursprunglig %@ · %@";
+"field.rendering" = "Rendering";
+"field.resolution" = "Upplösning";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Standard";
+"output.framebuffer" = "%@-bildbuffert";
+"status.active" = "Aktiv";
+"status.applying" = "Tillämpar";
+"status.current" = "Aktuell";
+"status.output" = "Vald utmatning";
+"status.systemMode" = "macOS-systemläge";
+
+"action.refresh" = "Uppdatera bildskärmar";
+"action.apply" = "Använd";
+"action.restore" = "Återställ";
+"action.openDisplaySettings" = "Öppna bildskärmsinställningar";
+"action.displaySettings" = "Bildskärmsinställningar";
+"action.quit" = "Avsluta";
+"setting.launchAtLogin" = "Öppna vid inloggning";
+"setting.language" = "Språk";
+"language.automatic" = "Automatiskt (system)";
+"empty.noCompatibleDisplay" = "Ingen extern bildskärm hittades";
+
+"error.launchAtLogin" = "Det gick inte att uppdatera ”Öppna vid inloggning”: %@";
+"error.currentModeUnavailable" = "Det gick inte att läsa det aktuella bildskärmsläget.";
+"error.nativeModeUnavailable" = "%@ %@ är inte längre tillgängligt från macOS.";
+"error.coreGraphics" = "Det gick inte att byta bildskärmsläge (CoreGraphics %ld).";
+"error.verification" = "Lägesbytet kunde inte verifieras och det föregående läget återställdes: %@";
+
+"verification.displayUnavailable" = "Den fysiska bildskärmen försvann";
+"verification.nativeMode" = "macOS valde %ldx%ld / %ldx%ld i stället";
+"verification.layoutChanged" = "Bildskärmarnas placering ändrades";
+"verification.displaySetChanged" = "Uppsättningen anslutna bildskärmar ändrades";
+"display.fallbackName" = "Extern bildskärm %u";

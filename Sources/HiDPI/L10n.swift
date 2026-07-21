@@ -5,6 +5,15 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     case automatic
     case english = "en"
     case simplifiedChinese = "zh-Hans"
+    case traditionalChinese = "zh-Hant"
+    case french = "fr"
+    case german = "de"
+    case italian = "it"
+    case spanish = "es"
+    case portuguese = "pt"
+    case swedish = "sv"
+    case norwegianBokmal = "nb"
+    case irish = "ga"
 
     static let defaultsKey = "appLanguage"
 
@@ -14,14 +23,38 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         self == .automatic ? nil : rawValue
     }
 
-    var localizedName: String {
+    static var menuCases: [AppLanguage] {
+        [.automatic] + allCases
+            .filter { $0 != .automatic }
+            .sorted { $0.rawValue < $1.rawValue }
+    }
+
+    var displayName: String {
         switch self {
         case .automatic:
             return L10n.tr("language.automatic", fallback: "Automatic")
         case .english:
-            return L10n.tr("language.english", fallback: "English")
+            return "English"
         case .simplifiedChinese:
-            return L10n.tr("language.simplifiedChinese", fallback: "Simplified Chinese")
+            return "简体中文"
+        case .traditionalChinese:
+            return "繁體中文"
+        case .french:
+            return "Français"
+        case .german:
+            return "Deutsch"
+        case .italian:
+            return "Italiano"
+        case .spanish:
+            return "Español"
+        case .portuguese:
+            return "Português"
+        case .swedish:
+            return "Svenska"
+        case .norwegianBokmal:
+            return "Norsk bokmål"
+        case .irish:
+            return "Gaeilge"
         }
     }
 }

@@ -26,8 +26,20 @@ final class LocalizationTests: XCTestCase {
     }
 
     func testSupportedLanguageCodes() {
-        XCTAssertNil(AppLanguage.automatic.localizationCode)
-        XCTAssertEqual(AppLanguage.english.localizationCode, "en")
-        XCTAssertEqual(AppLanguage.simplifiedChinese.localizationCode, "zh-Hans")
+        XCTAssertEqual(
+            AppLanguage.allCases.compactMap(\.localizationCode),
+            ["en", "zh-Hans", "zh-Hant", "fr", "de", "it", "es", "pt", "sv", "nb", "ga"]
+        )
+    }
+
+    func testLanguageMenuUsesNativeNamesAndBCP47CodeOrder() {
+        XCTAssertEqual(
+            Array(AppLanguage.menuCases.dropFirst()).map(\.rawValue),
+            ["de", "en", "es", "fr", "ga", "it", "nb", "pt", "sv", "zh-Hans", "zh-Hant"]
+        )
+        XCTAssertEqual(AppLanguage.german.displayName, "Deutsch")
+        XCTAssertEqual(AppLanguage.french.displayName, "Français")
+        XCTAssertEqual(AppLanguage.traditionalChinese.displayName, "繁體中文")
+        XCTAssertEqual(AppLanguage.norwegianBokmal.displayName, "Norsk bokmål")
     }
 }

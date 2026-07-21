@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="${0:A:h:h}"
 BASE_LOCALE="en"
-LOCALES=(en zh-Hans)
+LOCALES=(en de es fr ga it nb pt sv zh-Hans zh-Hant)
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 

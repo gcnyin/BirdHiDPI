@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-07-21
+
+### Added
+
+- Traditional Chinese, French, German, Italian, Spanish, Portuguese, Swedish, Norwegian Bokmål, and Irish localizations.
+
+### Changed
+
+- Language choices now use their native names and are sorted by BCP 47 language tag, with the system-language option first.
+- English is now the primary README, with Simplified Chinese available as a supplementary translation.
+
 ## [1.0.0] - 2026-07-21
 
 ### Added

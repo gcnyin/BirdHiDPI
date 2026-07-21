@@ -1,0 +1,40 @@
+"common.ok" = "OK";
+"error.unknown" = "Ukjent feil";
+
+"header.title" = "Skjermmoduser";
+"header.subtitle.inactive" = "Skalering av ekstern skjerm";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Opprinnelig %@ · %@";
+"field.rendering" = "Gjengivelse";
+"field.resolution" = "Oppløsning";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Standard";
+"output.framebuffer" = "%@ rammebuffer";
+"status.active" = "Aktiv";
+"status.applying" = "Tar i bruk";
+"status.current" = "Gjeldende";
+"status.output" = "Valgt utdata";
+"status.systemMode" = "macOS-systemmodus";
+
+"action.refresh" = "Oppdater skjermer";
+"action.apply" = "Bruk";
+"action.restore" = "Gjenopprett";
+"action.openDisplaySettings" = "Åpne skjerminnstillinger";
+"action.displaySettings" = "Skjerminnstillinger";
+"action.quit" = "Avslutt";
+"setting.launchAtLogin" = "Åpne ved pålogging";
+"setting.language" = "Språk";
+"language.automatic" = "Automatisk (system)";
+"empty.noCompatibleDisplay" = "Fant ingen ekstern skjerm";
+
+"error.launchAtLogin" = "Kunne ikke oppdatere «Åpne ved pålogging»: %@";
+"error.currentModeUnavailable" = "Kunne ikke lese gjeldende skjermmodus.";
+"error.nativeModeUnavailable" = "%@ %@ er ikke lenger tilgjengelig fra macOS.";
+"error.coreGraphics" = "Bytte av skjermmodus mislyktes (CoreGraphics %ld).";
+"error.verification" = "Modusbyttet ble ikke bekreftet, og den forrige modusen ble gjenopprettet: %@";
+
+"verification.displayUnavailable" = "Den fysiske skjermen forsvant";
+"verification.nativeMode" = "macOS valgte %ldx%ld / %ldx%ld i stedet";
+"verification.layoutChanged" = "Skjermplasseringen ble endret";
+"verification.displaySetChanged" = "Settet med tilkoblede skjermer ble endret";
+"display.fallbackName" = "Ekstern skjerm %u";

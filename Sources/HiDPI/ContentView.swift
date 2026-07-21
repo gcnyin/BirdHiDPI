@@ -327,14 +327,14 @@ struct ContentView: View {
             .help(L10n.tr("action.displaySettings", fallback: "Display Settings"))
 
             Menu {
-                ForEach(AppLanguage.allCases) { language in
+                ForEach(AppLanguage.menuCases) { language in
                     Button {
                         localizationSettings.language = language
                     } label: {
                         if localizationSettings.language == language {
-                            Label(language.localizedName, systemImage: "checkmark")
+                            Label(language.displayName, systemImage: "checkmark")
                         } else {
-                            Text(language.localizedName)
+                            Text(language.displayName)
                         }
                     }
                 }

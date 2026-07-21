@@ -1,0 +1,40 @@
+"common.ok" = "OK";
+"error.unknown" = "Errore sconosciuto";
+
+"header.title" = "Modalità schermo";
+"header.subtitle.inactive" = "Ridimensionamento dello schermo esterno";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Nativa %@ · %@";
+"field.rendering" = "Rendering";
+"field.resolution" = "Risoluzione";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Standard";
+"output.framebuffer" = "Framebuffer %@";
+"status.active" = "Attivo";
+"status.applying" = "Applicazione";
+"status.current" = "Attuale";
+"status.output" = "Uscita selezionata";
+"status.systemMode" = "Modalità di sistema macOS";
+
+"action.refresh" = "Aggiorna schermi";
+"action.apply" = "Applica";
+"action.restore" = "Ripristina";
+"action.openDisplaySettings" = "Apri Impostazioni Schermi";
+"action.displaySettings" = "Impostazioni Schermi";
+"action.quit" = "Esci";
+"setting.launchAtLogin" = "Apri al login";
+"setting.language" = "Lingua";
+"language.automatic" = "Automatica (sistema)";
+"empty.noCompatibleDisplay" = "Nessuno schermo esterno rilevato";
+
+"error.launchAtLogin" = "Impossibile aggiornare “Apri al login”: %@";
+"error.currentModeUnavailable" = "Impossibile leggere la modalità schermo attuale.";
+"error.nativeModeUnavailable" = "%@ %@ non è più disponibile in macOS.";
+"error.coreGraphics" = "Cambio della modalità schermo non riuscito (CoreGraphics %ld).";
+"error.verification" = "Il cambio di modalità non è stato verificato ed è stata ripristinata la modalità precedente: %@";
+
+"verification.displayUnavailable" = "Lo schermo fisico non è più disponibile";
+"verification.nativeMode" = "macOS ha selezionato invece %ldx%ld / %ldx%ld";
+"verification.layoutChanged" = "La disposizione degli schermi è cambiata";
+"verification.displaySetChanged" = "L’insieme degli schermi collegati è cambiato";
+"display.fallbackName" = "Schermo esterno %u";

@@ -1,0 +1,40 @@
+"common.ok" = "OK";
+"error.unknown" = "Earráid anaithnid";
+
+"header.title" = "Móid taispeána";
+"header.subtitle.inactive" = "Scálú taispeána sheachtraigh";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Dúchasach %@ · %@";
+"field.rendering" = "Rindreáil";
+"field.resolution" = "Taifeach";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Caighdeánach";
+"output.framebuffer" = "%@ maolán fráma";
+"status.active" = "Gníomhach";
+"status.applying" = "Á chur i bhfeidhm";
+"status.current" = "Reatha";
+"status.output" = "Aschur roghnaithe";
+"status.systemMode" = "Mód córais macOS";
+
+"action.refresh" = "Athnuaigh taispeántais";
+"action.apply" = "Cuir i bhfeidhm";
+"action.restore" = "Athchóirigh";
+"action.openDisplaySettings" = "Oscail Socruithe Taispeána";
+"action.displaySettings" = "Socruithe Taispeána";
+"action.quit" = "Scoir";
+"setting.launchAtLogin" = "Oscail ag logáil isteach";
+"setting.language" = "Teanga";
+"language.automatic" = "Uathoibríoch (córas)";
+"empty.noCompatibleDisplay" = "Níor braitheadh taispeáint sheachtrach";
+
+"error.launchAtLogin" = "Níorbh fhéidir “Oscail ag logáil isteach” a nuashonrú: %@";
+"error.currentModeUnavailable" = "Níorbh fhéidir mód reatha an taispeántais a léamh.";
+"error.nativeModeUnavailable" = "Níl %@ %@ ar fáil ó macOS a thuilleadh.";
+"error.coreGraphics" = "Theip ar athrú an mhóid taispeána (CoreGraphics %ld).";
+"error.verification" = "Níor fíoraíodh an t-athrú móid agus athchóiríodh an mód roimhe seo: %@";
+
+"verification.displayUnavailable" = "D’imigh an taispeáint fhisiciúil";
+"verification.nativeMode" = "Roghnaigh macOS %ldx%ld / %ldx%ld ina ionad";
+"verification.layoutChanged" = "D’athraigh leagan amach na dtaispeántas";
+"verification.displaySetChanged" = "D’athraigh an tacar taispeántas nasctha";
+"display.fallbackName" = "Taispeáint sheachtrach %u";

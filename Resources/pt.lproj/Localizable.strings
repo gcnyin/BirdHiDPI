@@ -1,0 +1,40 @@
+"common.ok" = "OK";
+"error.unknown" = "Erro desconhecido";
+
+"header.title" = "Modos de monitor";
+"header.subtitle.inactive" = "Escala do monitor externo";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Nativa %@ · %@";
+"field.rendering" = "Renderização";
+"field.resolution" = "Resolução";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Padrão";
+"output.framebuffer" = "Framebuffer %@";
+"status.active" = "Ativo";
+"status.applying" = "A aplicar";
+"status.current" = "Atual";
+"status.output" = "Saída selecionada";
+"status.systemMode" = "Modo de sistema do macOS";
+
+"action.refresh" = "Atualizar monitores";
+"action.apply" = "Aplicar";
+"action.restore" = "Restaurar";
+"action.openDisplaySettings" = "Abrir Definições de Monitores";
+"action.displaySettings" = "Definições de Monitores";
+"action.quit" = "Sair";
+"setting.launchAtLogin" = "Abrir ao iniciar sessão";
+"setting.language" = "Idioma";
+"language.automatic" = "Automático (sistema)";
+"empty.noCompatibleDisplay" = "Nenhum monitor externo detetado";
+
+"error.launchAtLogin" = "Não foi possível atualizar “Abrir ao iniciar sessão”: %@";
+"error.currentModeUnavailable" = "Não foi possível ler o modo de monitor atual.";
+"error.nativeModeUnavailable" = "%@ %@ já não está disponível no macOS.";
+"error.coreGraphics" = "Falha ao mudar o modo de monitor (CoreGraphics %ld).";
+"error.verification" = "A mudança de modo não foi verificada e o modo anterior foi restaurado: %@";
+
+"verification.displayUnavailable" = "O monitor físico desapareceu";
+"verification.nativeMode" = "O macOS selecionou %ldx%ld / %ldx%ld em alternativa";
+"verification.layoutChanged" = "A disposição dos monitores foi alterada";
+"verification.displaySetChanged" = "O conjunto de monitores ligados foi alterado";
+"display.fallbackName" = "Monitor externo %u";

@@ -1,0 +1,40 @@
+"common.ok" = "OK";
+"error.unknown" = "Erreur inconnue";
+
+"header.title" = "Modes d’affichage";
+"header.subtitle.inactive" = "Mise à l’échelle de l’écran externe";
+"header.subtitle.active" = "%@ · %@";
+"display.connectionSummary" = "Natif %@ · %@";
+"field.rendering" = "Rendu";
+"field.resolution" = "Résolution";
+"mode.hidpi" = "HiDPI";
+"mode.lodpi" = "Standard";
+"output.framebuffer" = "Mémoire tampon %@";
+"status.active" = "Actif";
+"status.applying" = "Application";
+"status.current" = "Actuel";
+"status.output" = "Sortie sélectionnée";
+"status.systemMode" = "Mode système macOS";
+
+"action.refresh" = "Actualiser les écrans";
+"action.apply" = "Appliquer";
+"action.restore" = "Restaurer";
+"action.openDisplaySettings" = "Ouvrir les réglages Moniteurs";
+"action.displaySettings" = "Réglages Moniteurs";
+"action.quit" = "Quitter";
+"setting.launchAtLogin" = "Ouvrir avec la session";
+"setting.language" = "Langue";
+"language.automatic" = "Automatique (système)";
+"empty.noCompatibleDisplay" = "Aucun écran externe détecté";
+
+"error.launchAtLogin" = "Impossible de modifier « Ouvrir avec la session » : %@";
+"error.currentModeUnavailable" = "Impossible de lire le mode d’affichage actuel.";
+"error.nativeModeUnavailable" = "%@ %@ n’est plus disponible dans macOS.";
+"error.coreGraphics" = "Échec du changement de mode d’affichage (CoreGraphics %ld).";
+"error.verification" = "Le changement de mode n’a pas été vérifié et le mode précédent a été restauré : %@";
+
+"verification.displayUnavailable" = "L’écran physique a disparu";
+"verification.nativeMode" = "macOS a sélectionné %ldx%ld / %ldx%ld à la place";
+"verification.layoutChanged" = "La disposition des écrans a changé";
+"verification.displaySetChanged" = "La liste des écrans connectés a changé";
+"display.fallbackName" = "Écran externe %u";
