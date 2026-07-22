@@ -16,7 +16,6 @@
 "status.output" = "Ausgewählte Ausgabe";
 "status.systemMode" = "macOS-Systemmodus";
 
-"action.refresh" = "Displays aktualisieren";
 "action.apply" = "Anwenden";
 "action.restore" = "Wiederherstellen";
 "action.openDisplaySettings" = "Display-Einstellungen öffnen";

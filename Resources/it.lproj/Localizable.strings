@@ -16,7 +16,6 @@
 "status.output" = "Uscita selezionata";
 "status.systemMode" = "Modalità di sistema macOS";
 
-"action.refresh" = "Aggiorna schermi";
 "action.apply" = "Applica";
 "action.restore" = "Ripristina";
 "action.openDisplaySettings" = "Apri Impostazioni Schermi";

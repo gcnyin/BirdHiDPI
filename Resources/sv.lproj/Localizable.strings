@@ -16,7 +16,6 @@
 "status.output" = "Vald utmatning";
 "status.systemMode" = "macOS-systemläge";
 
-"action.refresh" = "Uppdatera bildskärmar";
 "action.apply" = "Använd";
 "action.restore" = "Återställ";
 "action.openDisplaySettings" = "Öppna bildskärmsinställningar";

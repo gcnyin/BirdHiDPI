@@ -16,7 +16,6 @@
 "status.output" = "Valgt utdata";
 "status.systemMode" = "macOS-systemmodus";
 
-"action.refresh" = "Oppdater skjermer";
 "action.apply" = "Bruk";
 "action.restore" = "Gjenopprett";
 "action.openDisplaySettings" = "Åpne skjerminnstillinger";

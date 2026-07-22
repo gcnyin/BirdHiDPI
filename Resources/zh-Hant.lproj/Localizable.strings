@@ -16,7 +16,6 @@
 "status.output" = "已選輸出";
 "status.systemMode" = "macOS 系統模式";
 
-"action.refresh" = "重新整理顯示器";
 "action.apply" = "套用";
 "action.restore" = "還原";
 "action.openDisplaySettings" = "開啟顯示器設定";

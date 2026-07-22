@@ -16,7 +16,6 @@
 "status.output" = "Salida seleccionada";
 "status.systemMode" = "Modo del sistema macOS";
 
-"action.refresh" = "Actualizar pantallas";
 "action.apply" = "Aplicar";
 "action.restore" = "Restaurar";
 "action.openDisplaySettings" = "Abrir ajustes de Pantallas";

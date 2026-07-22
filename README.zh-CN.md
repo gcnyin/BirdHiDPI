@@ -43,7 +43,7 @@ Bird HiDPI 是一个轻量的原生 macOS 菜单栏工具，用于在真实外�
 下载校验文件后，可在同一目录验证压缩包：
 
 ```sh
-shasum -a 256 -c Bird-HiDPI-1.0.1-macos.zip.sha256
+shasum -a 256 -c Bird-HiDPI-1.0.2-macos.zip.sha256
 ```
 
 ### 从源码构建

@@ -21,6 +21,9 @@ struct ContentView: View {
             footer
         }
         .frame(width: 392)
+        .onAppear {
+            displayService.refresh()
+        }
         .alert("Bird HiDPI", isPresented: errorBinding) {
             Button(L10n.tr("common.ok", fallback: "OK"), role: .cancel) {}
         } message: {
@@ -49,15 +52,6 @@ struct ContentView: View {
             }
 
             Spacer(minLength: 12)
-
-            Button {
-                displayService.refresh()
-            } label: {
-                Image(systemName: "arrow.clockwise")
-                    .frame(width: 26, height: 26)
-            }
-            .buttonStyle(.borderless)
-            .help(L10n.tr("action.refresh", fallback: "Refresh displays"))
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 11)

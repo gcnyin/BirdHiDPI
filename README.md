@@ -43,7 +43,7 @@ Current public builds are ad-hoc signed and are not yet signed with an Apple Dev
 To verify a download, place the checksum next to the archive and run:
 
 ```sh
-shasum -a 256 -c Bird-HiDPI-1.0.1-macos.zip.sha256
+shasum -a 256 -c Bird-HiDPI-1.0.2-macos.zip.sha256
 ```
 
 ### Build From Source

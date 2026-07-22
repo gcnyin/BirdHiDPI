@@ -16,7 +16,6 @@
 "status.output" = "Selected output";
 "status.systemMode" = "macOS system mode";
 
-"action.refresh" = "Refresh displays";
 "action.apply" = "Apply";
 "action.restore" = "Restore";
 "action.openDisplaySettings" = "Open Display Settings";
