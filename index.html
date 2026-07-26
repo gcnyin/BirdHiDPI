@@ -7,94 +7,212 @@
 <meta name="description" content="Bird HiDPI is a lightweight native macOS menu bar utility for selecting HiDPI modes that WindowServer already provides for a real external display.">
 <style>
   :root{
-    --bg:#0b0d10; --panel:#13161b; --panel-2:#1a1e25; --fg:#e6e8eb; --muted:#9aa3ad;
-    --accent:#4ea1ff; --accent-2:#7bd88f; --border:#262b33;
+    --bg:#06070a; --panel:rgba(20,24,32,.55); --panel-2:rgba(28,33,43,.7);
+    --fg:#eef2f7; --muted:#9aa6b5; --border:rgba(255,255,255,.09);
+    --c1:#4ea1ff; --c2:#7bd88f; --c3:#f4c95d; --c4:#c084fc;
+    --glow:0 0 40px rgba(78,161,255,.45);
   }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
   body{
     background:var(--bg); color:var(--fg);
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Hiragino Sans",sans-serif;
-    line-height:1.6; -webkit-font-smoothing:antialiased;
+    line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    position:relative;
+  }
+  /* animated mesh background */
+  .bg-mesh{
+    position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none;
+  }
+  .bg-mesh::before, .bg-mesh::after, .bg-mesh i{
+    content:""; position:absolute; border-radius:50%; filter:blur(80px); opacity:.55;
+    mix-blend-mode:screen; animation:float 18s ease-in-out infinite;
+  }
+  .bg-mesh::before{
+    width:560px;height:560px; background:radial-gradient(circle,#4ea1ff,transparent 65%);
+    top:-120px; left:-100px;
+  }
+  .bg-mesh::after{
+    width:620px;height:620px; background:radial-gradient(circle,#c084fc,transparent 65%);
+    bottom:-160px; right:-120px; animation-delay:-6s;
+  }
+  .bg-mesh i{
+    width:440px;height:440px; background:radial-gradient(circle,#7bd88f,transparent 65%);
+    top:40%; left:55%; animation-delay:-10s;
+  }
+  @keyframes float{
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(60px,-40px) scale(1.08)}
+    66%{transform:translate(-40px,50px) scale(.96)}
+  }
+  /* subtle grid overlay */
+  .bg-grid{
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:46px 46px; mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 80%);
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 22px}
+
+  header{padding:64px 0 30px; text-align:center; position:relative}
+  .hero{display:flex; flex-direction:column; align-items:center; gap:14px}
+  .logo{
+    width:104px;height:104px;border-radius:26px;
+    background:conic-gradient(from 200deg,#4ea1ff,#7bd88f,#f4c95d,#c084fc,#4ea1ff);
+    display:grid;place-items:center; position:relative;
+    box-shadow:0 0 60px rgba(78,161,255,.5),0 0 120px rgba(192,132,252,.3),inset 0 0 30px rgba(255,255,255,.15);
+    animation:breathe 4.5s ease-in-out infinite;
+  }
+  .logo::after{
+    content:""; position:absolute; inset:-4px; border-radius:30px;
+    background:conic-gradient(from 200deg,#4ea1ff,#7bd88f,#f4c95d,#c084fc,#4ea1ff);
+    filter:blur(14px); opacity:.55; z-index:-1;
+  }
+  .logo span{font-size:46px; line-height:1; filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+  @keyframes breathe{
+    0%,100%{transform:scale(1) rotate(0)}
+    50%{transform:scale(1.06) rotate(-2deg)}
+  }
+  h1{
+    font-size:clamp(34px,5vw,52px); font-weight:800; letter-spacing:-.02em;
+    background:linear-gradient(110deg,#fff 10%,#bcd6ff 40%,#a6f0c2 60%,#fff 90%);
+    background-size:220% auto; -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:shine 6s linear infinite;
+  }
+  @keyframes shine{ to{background-position:220% center} }
+  .tag{color:var(--muted); font-size:var(--14,17px); max-width:620px; margin:0 auto}
+  .langbar{margin-top:18px; display:flex; gap:7px; flex-wrap:wrap; justify-content:center}
+  .langbar button{
+    background:var(--panel-2); color:var(--muted); border:1px solid var(--border);
+    border-radius:999px; padding:5px 13px; font-size:12.5px; cursor:pointer; transition:.2s;
+    backdrop-filter:blur(8px);
+  }
+  .langbar button:hover{color:var(--fg); border-color:var(--c1); transform:translateY(-1px); box-shadow:0 6px 20px rgba(78,161,255,.3)}
+  .langbar button.active{
+    background:linear-gradient(110deg,var(--c1),var(--c4)); color:#fff;
+    border-color:transparent; font-weight:700; box-shadow:0 4px 18px rgba(78,161,255,.45);
+  }
+
+  section{padding:10px 0}
+  h2{
+    font-size:20px; font-weight:700; margin:0 0 12px; letter-spacing:-.01em;
+    display:flex; align-items:center; gap:10px;
+  }
+  h2::before{
+    content:""; width:4px; height:18px; border-radius:2px;
+    background:linear-gradient(var(--c1),var(--c2)); box-shadow:var(--glow);
   }
   p{margin:0 0 12px}
   p:last-child{margin-bottom:0}
-  .wrap{max-width:880px; margin:0 auto; padding:0 20px}
-  header{
-    border-bottom:1px solid var(--border);
-    background:linear-gradient(180deg,#11141a, #0b0d10);
-    padding:28px 0 22px;
-  }
-  .hero{display:flex; align-items:center; gap:20px; flex-wrap:wrap}
-  .logo{
-    width:88px;height:88px;border-radius:20px;
-    background:conic-gradient(from 210deg,#4ea1ff,#7bd88f,#f4c95d,#4ea1ff);
-    display:grid;place-items:center; box-shadow:0 12px 36px rgba(78,161,255,.25);
-  }
-  .logo span{font-size:40px; line-height:1}
-  h1{font-size:30px; margin:0; letter-spacing:-.01em}
-  .tag{color:var(--muted); font-size:15px; margin-top:6px}
-  .langbar{margin-top:14px; display:flex; gap:6px; flex-wrap:wrap}
-  .langbar button{
-    background:var(--panel-2); color:var(--muted); border:1px solid var(--border);
-    border-radius:999px; padding:5px 13px; font-size:13px; cursor:pointer; transition:.15s;
-  }
-  .langbar button:hover{color:var(--fg); border-color:var(--accent)}
-  .langbar button.active{background:var(--accent); color:#061018; border-color:var(--accent); font-weight:600}
-  section{padding:8px 0}
-  h2{font-size:19px; margin:0 0 8px; letter-spacing:-.01em}
-  .lead{font-size:17px; color:var(--fg)}
-  .features{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+  .lead{font-size:18px; color:var(--fg)}
+
+  .features{list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:12px}
   .features li{
-    background:var(--panel); border:1px solid var(--border); border-radius:12px;
-    padding:13px 16px; position:relative; padding-left:40px;
-    color:var(--fg);
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px 16px 44px; position:relative; color:var(--fg);
+    backdrop-filter:blur(14px); transition:transform .25s, box-shadow .25s, border-color .25s;
+    font-size:14.5px;
   }
   .features li::before{
-    content:""; position:absolute; left:16px; top:18px; width:8px;height:8px;
-    border-radius:50%; background:var(--accent-2);
+    content:""; position:absolute; left:16px; top:18px; width:14px;height:14px;
+    border-radius:50%;
+    background:linear-gradient(var(--c2),var(--c1));
+    box-shadow:0 0 12px rgba(123,216,143,.7);
   }
-  .shot{
-    margin-top:4px; border:1px solid var(--border); border-radius:12px;
-    overflow:hidden; background:var(--panel);
-    box-shadow:0 14px 44px rgba(0,0,0,.4);
+  .features li:hover{
+    transform:translateY(-4px) scale(1.01);
+    border-color:rgba(123,216,143,.45);
+    box-shadow:0 14px 40px rgba(0,0,0,.4),0 0 30px rgba(123,216,143,.12);
   }
-  .shot img{width:100%; display:block}
+
   .warn{
-    border-left:3px solid #f4c95d; background:rgba(244,201,93,.08);
-    padding:12px 14px; border-radius:8px; color:var(--fg); margin-top:4px;
+    border:1px solid rgba(244,201,93,.35); border-left:3px solid #f4c95d;
+    background:linear-gradient(180deg,rgba(244,201,93,.12),rgba(244,201,93,.04));
+    padding:14px 16px; border-radius:10px; margin-top:6px;
+    backdrop-filter:blur(10px);
   }
   .warn b{color:#f4c95d}
+
+  .shot-wrap{perspective:1400px}
+  .shot{
+    border:1px solid var(--border); border-radius:16px; overflow:hidden;
+    background:var(--panel); box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 60px rgba(78,161,255,.15);
+    transform-style:preserve-3d; transition:transform .15s ease-out; backdrop-filter:blur(6px);
+  }
+  .shot img{width:100%; display:block; transform:translateZ(40px)}
+  .shot::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(140deg,rgba(255,255,255,.08),transparent 40%);
+  }
+
   pre{
-    background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:14px 16px; overflow-x:auto; font-size:13.5px; color:#cfd6de;
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px; overflow-x:auto; font-size:13.5px; color:#cfd6be;
+    backdrop-filter:blur(10px);
   }
   code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
-  code.inline{background:var(--panel-2); padding:2px 6px; border-radius:5px; font-size:.92em}
-  .cards{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-  .card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px}
-  .card h3{margin:0 0 8px; font-size:15px; color:var(--accent)}
-  .card p{margin:0; font-size:14px; color:var(--muted)}
-  footer{border-top:1px solid var(--border); padding:20px 0; color:var(--muted); font-size:13px}
-  a{color:var(--accent); text-decoration:none}
-  a:hover{text-decoration:underline}
-  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
-  @media(max-width:640px){ .cards,.grid3{grid-template-columns:1fr} }
-  .pill{display:inline-block; background:var(--panel-2); border:1px solid var(--border); color:var(--muted); border-radius:999px; padding:4px 10px; font-size:12px; margin:2px 4px 2px 0}
+  code.inline{background:var(--panel-2); padding:2px 7px; border-radius:6px; font-size:.9em; border:1px solid var(--border)}
+
+  .cards{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px;
+    backdrop-filter:blur(12px); transition:.25s;
+  }
+  .card:hover{transform:translateY(-4px); border-color:rgba(78,161,255,.4); box-shadow:0 12px 36px rgba(78,161,255,.15)}
+  .card h3{margin:0 0 6px; font-size:15px; background:linear-gradient(90deg,var(--c1),var(--c4)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .card p{margin:0; font-size:13.5px; color:var(--muted)}
+
+  .pill{
+    display:inline-block; background:var(--panel-2); border:1px solid var(--border); color:var(--muted);
+    border-radius:999px; padding:4px 11px; font-size:12px; margin:3px 4px 3px 0;
+    transition:.2s;
+  }
+  .pill:hover{color:#fff; border-color:var(--c1); box-shadow:0 0 14px rgba(78,161,255,.25)}
+
+  ol{padding-left:22px}
+  ol li{margin:6px 0; color:var(--fg)}
+
+  footer{
+    border-top:1px solid var(--border); padding:28px 0; text-align:center; color:var(--muted); font-size:13px;
+    margin-top:24px; position:relative; overflow:hidden;
+  }
+  footer::before{
+    content:""; position:absolute; left:50%; top:0; transform:translateX(-50%);
+    width:200%; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(78,161,255,.6),rgba(192,132,252,.6),transparent);
+    animation:slide 5s linear infinite;
+  }
+  @keyframes slide{ to{transform:translateX(-50%) translateX(-50%)} }
+  footer a{color:var(--c1); text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
   .hidden{display:none !important}
+
+  /* scroll reveal */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.show{opacity:1; transform:none}
+
+  @media(max-width:640px){
+    .features,.cards{grid-template-columns:1fr}
+    header{padding:40px 0 20px}
+    .logo{width:84px;height:84px}
+    .logo span{font-size:38px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important; transition:none !important}
+    .reveal{opacity:1; transform:none}
+  }
 </style>
 </head>
 <body>
+<div class="bg-mesh"><i></i></div>
+<div class="bg-grid"></div>
 
 <header>
-  <div class="wrap">
-    <div class="hero">
-      <div class="logo"><span>🐦</span></div>
-      <div>
-        <h1>Bird HiDPI</h1>
-        <div class="tag" data-i18n="tag"></div>
-      </div>
-    </div>
+  <div class="wrap hero">
+    <div class="logo"><span>🐦</span></div>
+    <h1>Bird HiDPI</h1>
+    <p class="tag" data-i18n="tag"></p>
     <nav class="langbar" id="langbar">
       <button data-lang="en" class="active">English</button>
       <button data-lang="zh-CN">简体中文</button>
@@ -113,12 +231,12 @@
 
 <div class="wrap">
 
-  <section>
+  <section class="reveal">
     <p class="lead" data-i18n="intro"></p>
     <div class="warn"><b data-i18n="warnTitle"></b> <span data-i18n="warn"></span></div>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="featuresTitle"></h2>
     <ul class="features">
       <li data-i18n="f1"></li>
@@ -132,25 +250,25 @@
     </ul>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="shotTitle"></h2>
-    <p data-i18n="shotDesc" style="color:var(--muted); margin-top:0"></p>
-    <div class="shot"><img src="assets/screenshot.png" alt="Bird HiDPI screenshot"></div>
+    <p data-i18n="shotDesc" style="color:var(--muted)"></p>
+    <div class="shot-wrap"><div class="shot" id="shot"><img src="assets/screenshot.png" alt="Bird HiDPI screenshot"></div></div>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="howTitle"></h2>
     <p data-i18n="howP1"></p>
     <p data-i18n="howP2"></p>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="reqTitle"></h2>
     <div class="cards">
       <div class="card"><h3 data-i18n="r1t"></h3><p data-i18n="r1d"></p></div>
       <div class="card"><h3 data-i18n="r2t"></h3><p data-i18n="r2d"></p></div>
     </div>
-    <p style="margin-top:14px; color:var(--muted)">
+    <p style="margin-top:12px; color:var(--muted)">
       <span data-i18n="langLabel"></span>
       <span class="pill">English</span><span class="pill">简体中文</span><span class="pill">繁體中文</span>
       <span class="pill">Français</span><span class="pill">Deutsch</span><span class="pill">Italiano</span>
@@ -159,10 +277,10 @@
     </p>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="installTitle"></h2>
     <p data-i18n="installRel"></p>
-    <p style="margin:14px 0 6px; color:var(--muted)" data-i18n="buildTitle"></p>
+    <p style="margin:12px 0 6px; color:var(--muted)" data-i18n="buildTitle"></p>
     <pre><code>git clone https://github.com/gcnyin/BirdHiDPI.git
 cd BirdHiDPI
 make test
@@ -170,9 +288,9 @@ make app
 open "dist/Bird HiDPI.app"</code></pre>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="usageTitle"></h2>
-    <ol style="padding-left:22px; color:var(--fg)">
+    <ol>
       <li data-i18n="u1"></li>
       <li data-i18n="u2"></li>
       <li data-i18n="u3"></li>
@@ -181,7 +299,7 @@ open "dist/Bird HiDPI.app"</code></pre>
     </ol>
   </section>
 
-  <section>
+  <section class="reveal">
     <h2 data-i18n="privacyTitle"></h2>
     <p data-i18n="privacy"></p>
   </section>
@@ -396,7 +514,7 @@ const I18N = {
     r2t:"Da sorgente",r2d:"Xcode Command Line Tools, solo per la compilazione da sorgente.",
     langLabel:"Lingue:",
     installTitle:"Installazione",
-    installRel:"Installa l\u2019ultimo Bird-HiDPI-<versione>-macos.zip da GitHub Releases. Sposta Bird HiDPI.app in Applicazioni. Se macOS non verifies lo sviluppatore al primo avvio, Control-clic sull\u2019app nel Finder e scegli Apri.",
+    installRel:"Installa l\u2019ultimo Bird-HiDPI-<versione>-macos.zip da GitHub Releases. Sposta Bird HiDPI.app in Applicazioni. Se macOS non verificates lo sviluppatore al primo avvio, Control-clic sull\u2019app nel Finder e scegli Apri.",
     buildTitle:"Oppure compila da sorgente:",
     usageTitle:"Uso",
     u1:"Clicca sull\u2019icona schermo nella barra dei menu.",
@@ -580,7 +698,7 @@ const I18N = {
     u4:"Cliceáil Cuir i bhFeidhm. Is féidir módanna a athrú go díreach fós agus tú gníomhach.",
     u5:"Cliceáil Athchúplaigh chun filleadh ar an mód roimh thosachú an aip.",
     privacyTitle:"Príobháideacht",
-    privacy:"Gan feidhmiúlacht líonra, gan te Kliméitreá. Ní stóráiltear ach an mód roghnaithe is déanaí in aghaidh an scáileáin agus tosaíocht na teanga i UserDefaults logánta.",
+    privacy:"Gan feidhmiúlacht líonra, gan teleméadra. Ní stóráiltear ach an mód roghnaithe is déanaí in aghaidh an scáileáin agus tosaíocht na teanga i UserDefaults logánta.",
     footer:"\u00a9 Bird HiDPI \u00b7",
     releases:"Eisiúintí"
   }
@@ -609,6 +727,23 @@ applyLang(initLang);
 document.getElementById("langbar").addEventListener("click", e=>{
   if(e.target.matches("button[data-lang]")) applyLang(e.target.dataset.lang);
 });
+
+/* scroll reveal */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("show"); io.unobserve(en.target); } });
+}, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* screenshot parallax tilt */
+const shot = document.getElementById("shot");
+const shotWrap = shot.parentElement;
+shotWrap.addEventListener("mousemove", e=>{
+  const r = shotWrap.getBoundingClientRect();
+  const rx = ((e.clientY - r.top)/r.height - .5) * -8;
+  const ry = ((e.clientX - r.left)/r.width - .5) * 10;
+  shot.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+});
+shotWrap.addEventListener("mouseleave", ()=> shot.style.transform = "" );
 </script>
 </body>
 </html>
