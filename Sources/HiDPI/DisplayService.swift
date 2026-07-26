@@ -138,8 +138,13 @@ final class DisplayService: ObservableObject {
     }
 
     func enable(on display: DisplayDevice) {
-        guard session == nil, isApplyingDisplayID == nil else { return }
-        apply(display: display, output: configuration(for: display), beginsSession: true)
+        guard isApplyingDisplayID == nil else { return }
+        if let active = activeConfiguration, active.displayID != display.id { return }
+        apply(
+            display: display,
+            output: configuration(for: display),
+            beginsSession: session == nil
+        )
     }
 
     func disable() {
@@ -200,12 +205,6 @@ final class DisplayService: ObservableObject {
         guard isModeAvailable(output, for: display) else { return }
         selections[display.id] = output
         store(output, for: display)
-        guard activeConfiguration?.displayID == display.id,
-              activeConfiguration?.output != output,
-              isApplyingDisplayID == nil else {
-            return
-        }
-        apply(display: display, output: output, beginsSession: false)
     }
 
     private func apply(

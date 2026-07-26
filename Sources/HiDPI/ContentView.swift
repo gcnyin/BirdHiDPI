@@ -20,7 +20,7 @@ struct ContentView: View {
             Divider()
             footer
         }
-        .frame(width: 392)
+        .frame(width: 336)
         .onAppear {
             displayService.refresh()
         }
@@ -51,9 +51,9 @@ struct ContentView: View {
                     .lineLimit(1)
             }
 
-            Spacer(minLength: 12)
+            Spacer(minLength: 10)
         }
-        .padding(.horizontal, 14)
+        .padding(.horizontal, 12)
         .padding(.vertical, 11)
     }
 
@@ -81,49 +81,44 @@ struct ContentView: View {
             (displayService.isApplyingDisplayID != nil && !isApplying)
 
         return VStack(spacing: 0) {
-            displayHeader(display, output: output)
-            Divider().padding(.leading, 54)
+            displayHeader(
+                display,
+                isActive: isActive,
+                isApplying: isApplying,
+                isCurrent: isCurrent
+            )
+            Divider().padding(.leading, 46)
             renderingRow(display, output: output, disabled: controlsDisabled)
-            Divider().padding(.leading, 54)
-
-            sectionHeader(L10n.tr("field.resolution", fallback: "Resolution"))
+            Divider().padding(.leading, 46)
 
             VStack(spacing: 0) {
                 ForEach(resolutions) { resolution in
                     ResolutionRow(
                         resolution: resolution,
-                        isHiDPI: output.isHiDPI,
                         isSelected: output.resolution == resolution,
                         isDisabled: controlsDisabled
                     ) {
                         displayService.setResolution(resolution, for: display)
                     }
                     if resolution != resolutions.last {
-                        Divider().padding(.leading, 54)
+                        Divider().padding(.leading, 46)
                     }
                 }
             }
-
-            Divider()
-            actionRow(
-                display,
-                output: output,
-                isActive: isActive,
-                isApplying: isApplying,
-                isCurrent: isCurrent
-            )
         }
     }
 
     private func displayHeader(
         _ display: DisplayDevice,
-        output: DisplayOutputConfiguration
+        isActive: Bool,
+        isApplying: Bool,
+        isCurrent: Bool
     ) -> some View {
-        HStack(spacing: 11) {
+        HStack(spacing: 10) {
             Image(systemName: "display")
-                .font(.system(size: 18, weight: .medium))
+                .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(.primary)
-                .frame(width: 29, height: 29)
+                .frame(width: 24, height: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(display.name)
@@ -137,20 +132,50 @@ struct ContentView: View {
                 ))
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
             }
 
             Spacer(minLength: 8)
 
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(output.resolution.label)
-                    .font(.system(size: 14, weight: .semibold).monospacedDigit())
-                Text(L10n.modeName(isHiDPI: output.isHiDPI))
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(output.isHiDPI ? Color.green : Color.secondary)
+            if isApplying {
+                HStack(spacing: 6) {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text(L10n.tr("status.applying", fallback: "Applying"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } else if isCurrent {
+                Label(
+                    L10n.tr("status.current", fallback: "Current"),
+                    systemImage: "checkmark.circle.fill"
+                )
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.green)
+                .help(L10n.tr(
+                    "help.current",
+                    fallback: "Selection matches the current mode; nothing to apply"
+                ))
+            } else {
+                Button {
+                    displayService.enable(on: display)
+                } label: {
+                    Text(L10n.tr("action.apply", fallback: "Apply"))
+                        .frame(minWidth: 50)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(
+                    displayService.isApplyingDisplayID != nil ||
+                        (displayService.activeConfiguration != nil && !isActive)
+                )
+                .help(L10n.tr(
+                    "help.apply",
+                    fallback: "Apply the selected resolution and HiDPI mode"
+                ))
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 11)
     }
 
     private func renderingRow(
@@ -158,11 +183,11 @@ struct ContentView: View {
         output: DisplayOutputConfiguration,
         disabled: Bool
     ) -> some View {
-        HStack(spacing: 11) {
+        HStack(spacing: 10) {
             Image(systemName: "sparkles.rectangle.stack")
-                .font(.system(size: 16))
+                .font(.system(size: 15))
                 .foregroundStyle(output.isHiDPI ? Color.green : Color.secondary)
-                .frame(width: 29, height: 29)
+                .frame(width: 24, height: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(L10n.tr("mode.hidpi", fallback: "HiDPI"))
@@ -174,6 +199,7 @@ struct ContentView: View {
                 ))
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
             }
 
             Spacer(minLength: 8)
@@ -190,88 +216,12 @@ struct ContentView: View {
                     !displayService.hasModes(for: display, isHiDPI: !output.isHiDPI)
             )
         }
-        .padding(.horizontal, 14)
+        .padding(.horizontal, 12)
         .padding(.vertical, 10)
     }
 
-    private func sectionHeader(_ title: String) -> some View {
-        HStack {
-            Text(title.uppercased())
-                .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(.secondary)
-            Spacer()
-        }
-        .padding(.horizontal, 14)
-        .padding(.top, 12)
-        .padding(.bottom, 5)
-    }
-
-    private func actionRow(
-        _ display: DisplayDevice,
-        output: DisplayOutputConfiguration,
-        isActive: Bool,
-        isApplying: Bool,
-        isCurrent: Bool
-    ) -> some View {
-        HStack(spacing: 10) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(L10n.tr("status.output", fallback: "Current output"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("\(output.resolution.label) · \(output.scale)x")
-                    .font(.caption.weight(.medium).monospacedDigit())
-            }
-
-            Spacer()
-
-            if isApplying {
-                ProgressView()
-                    .controlSize(.small)
-                Text(L10n.tr("status.applying", fallback: "Applying"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else if isActive {
-                Button {
-                    displayService.disable()
-                } label: {
-                    Label(
-                        L10n.tr("action.restore", fallback: "Restore"),
-                        systemImage: "arrow.uturn.backward"
-                    )
-                }
-            } else if isCurrent {
-                Label(
-                    L10n.tr("status.current", fallback: "Current"),
-                    systemImage: "checkmark.circle.fill"
-                )
-                .font(.caption.weight(.medium))
-                .foregroundStyle(.green)
-            } else {
-                Button {
-                    displayService.enable(on: display)
-                } label: {
-                    Text(L10n.tr("action.apply", fallback: "Apply"))
-                        .frame(minWidth: 54)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(displayService.isApplyingDisplayID != nil)
-            }
-        }
-        .frame(minHeight: 32)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 9)
-    }
-
     private var headerStatus: String {
-        if let output = displayService.activeConfiguration?.output {
-            return L10n.format(
-                "header.subtitle.active",
-                fallback: "%@ · %@",
-                output.resolution.label,
-                L10n.modeName(isHiDPI: output.isHiDPI)
-            )
-        }
-        return L10n.tr("header.subtitle.inactive", fallback: "External display scaling")
+        L10n.tr("header.subtitle.inactive", fallback: "External display scaling")
     }
 
     private var emptyState: some View {
@@ -371,7 +321,6 @@ struct ContentView: View {
 
 private struct ResolutionRow: View {
     let resolution: DisplayResolution
-    let isHiDPI: Bool
     let isSelected: Bool
     let isDisabled: Bool
     let action: () -> Void
@@ -380,20 +329,16 @@ private struct ResolutionRow: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 11) {
+            HStack(spacing: 10) {
                 Image(systemName: isSelected ? "circle.inset.filled" : "circle")
                     .font(.system(size: 12))
                     .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
-                    .frame(width: 29, height: 26)
+                    .frame(width: 24, height: 24)
 
                 Text(resolution.label)
                     .font(.system(size: 13).monospacedDigit())
 
                 Spacer()
-
-                Text("\(resolution.width * (isHiDPI ? 2 : 1)) x \(resolution.height * (isHiDPI ? 2 : 1))")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
 
                 if isSelected {
                     Image(systemName: "checkmark")
@@ -406,8 +351,8 @@ private struct ResolutionRow: View {
                 }
             }
             .contentShape(Rectangle())
-            .padding(.horizontal, 14)
-            .padding(.vertical, 7)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
             .background(isHovered ? Color.primary.opacity(0.055) : Color.clear)
         }
         .buttonStyle(.plain)
