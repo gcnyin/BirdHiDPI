@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bird HiDPI — macOS menu bar HiDPI utility</title>
+<meta name="description" content="Bird HiDPI is a lightweight native macOS menu bar utility for selecting HiDPI modes that WindowServer already provides for a real external display.">
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#13161b; --panel-2:#1a1e25; --fg:#e6e8eb; --muted:#9aa3ad;
+    --accent:#4ea1ff; --accent-2:#7bd88f; --border:#262b33;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Hiragino Sans",sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:0 20px}
+  header{
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,#11141a, #0b0d10);
+    padding:48px 0 36px;
+  }
+  .hero{display:flex; align-items:center; gap:20px; flex-wrap:wrap}
+  .logo{
+    width:88px;height:88px;border-radius:20px;
+    background:conic-gradient(from 210deg,#4ea1ff,#7bd88f,#f4c95d,#4ea1ff);
+    display:grid;place-items:center; box-shadow:0 12px 36px rgba(78,161,255,.25);
+  }
+  .logo span{font-size:40px; line-height:1}
+  h1{font-size:30px; margin:0; letter-spacing:-.01em}
+  .tag{color:var(--muted); font-size:15px; margin-top:6px}
+  .langbar{margin-top:22px; display:flex; gap:8px; flex-wrap:wrap}
+  .langbar button{
+    background:var(--panel-2); color:var(--muted); border:1px solid var(--border);
+    border-radius:999px; padding:5px 13px; font-size:13px; cursor:pointer; transition:.15s;
+  }
+  .langbar button:hover{color:var(--fg); border-color:var(--accent)}
+  .langbar button.active{background:var(--accent); color:#061018; border-color:var(--accent); font-weight:600}
+  section{padding:48px 0}
+  h2{font-size:21px; margin:0 0 16px; letter-spacing:-.01em}
+  .lead{font-size:17px; color:var(--fg)}
+  .features{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+  .features li{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:13px 16px; position:relative; padding-left:40px;
+    color:var(--fg);
+  }
+  .features li::before{
+    content:""; position:absolute; left:16px; top:18px; width:8px;height:8px;
+    border-radius:50%; background:var(--accent-2);
+  }
+  .shot{
+    margin-top:8px; border:1px solid var(--border); border-radius:14px;
+    overflow:hidden; background:var(--panel);
+    box-shadow:0 18px 60px rgba(0,0,0,.4);
+  }
+  .shot img{width:100%; display:block}
+  .warn{
+    border-left:3px solid #f4c95d; background:rgba(244,201,93,.08);
+    padding:14px 16px; border-radius:8px; color:var(--fg); margin:6px 0 0;
+  }
+  .warn b{color:#f4c95d}
+  pre{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:14px 16px; overflow-x:auto; font-size:13.5px; color:#cfd6de;
+  }
+  code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  code.inline{background:var(--panel-2); padding:2px 6px; border-radius:5px; font-size:.92em}
+  .cards{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px}
+  .card h3{margin:0 0 8px; font-size:15px; color:var(--accent)}
+  .card p{margin:0; font-size:14px; color:var(--muted)}
+  footer{border-top:1px solid var(--border); padding:30px 0; color:var(--muted); font-size:13px}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  @media(max-width:640px){ .cards,.grid3{grid-template-columns:1fr} }
+  .pill{display:inline-block; background:var(--panel-2); border:1px solid var(--border); color:var(--muted); border-radius:999px; padding:4px 10px; font-size:12px; margin:2px 4px 2px 0}
+  .hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hero">
+      <div class="logo"><span>🐦</span></div>
+      <div>
+        <h1>Bird HiDPI</h1>
+        <div class="tag" data-i18n="tag"></div>
+      </div>
+    </div>
+    <nav class="langbar" id="langbar">
+      <button data-lang="en" class="active">English</button>
+      <button data-lang="zh-CN">简体中文</button>
+      <button data-lang="zh-TW">繁體中文</button>
+      <button data-lang="fr">Français</button>
+      <button data-lang="de">Deutsch</button>
+      <button data-lang="it">Italiano</button>
+      <button data-lang="es">Español</button>
+      <button data-lang="pt">Português</button>
+      <button data-lang="sv">Svenska</button>
+      <button data-lang="nb">Norsk bokmål</button>
+      <button data-lang="ga">Gaeilge</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <p class="lead" data-i18n="intro"></p>
+    <div class="warn"><b data-i18n="warnTitle"></b> <span data-i18n="warn"></span></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="featuresTitle"></h2>
+    <ul class="features">
+      <li data-i18n="f1"></li>
+      <li data-i18n="f2"></li>
+      <li data-i18n="f3"></li>
+      <li data-i18n="f4"></li>
+      <li data-i18n="f5"></li>
+      <li data-i18n="f6"></li>
+      <li data-i18n="f7"></li>
+      <li data-i18n="f8"></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 data-i18n="shotTitle"></h2>
+    <p data-i18n="shotDesc" style="color:var(--muted); margin-top:0"></p>
+    <div class="shot"><img src="assets/screenshot.png" alt="Bird HiDPI screenshot"></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="howTitle"></h2>
+    <p data-i18n="howP1"></p>
+    <p data-i18n="howP2"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="reqTitle"></h2>
+    <div class="cards">
+      <div class="card"><h3 data-i18n="r1t"></h3><p data-i18n="r1d"></p></div>
+      <div class="card"><h3 data-i18n="r2t"></h3><p data-i18n="r2d"></p></div>
+    </div>
+    <p style="margin-top:14px; color:var(--muted)">
+      <span data-i18n="langLabel"></span>
+      <span class="pill">English</span><span class="pill">简体中文</span><span class="pill">繁體中文</span>
+      <span class="pill">Français</span><span class="pill">Deutsch</span><span class="pill">Italiano</span>
+      <span class="pill">Español</span><span class="pill">Português</span><span class="pill">Svenska</span>
+      <span class="pill">Norsk bokmål</span><span class="pill">Gaeilge</span>
+    </p>
+  </section>
+
+  <section>
+    <h2 data-i18n="installTitle"></h2>
+    <p data-i18n="installRel"></p>
+    <p style="margin:18px 0 6px; color:var(--muted)" data-i18n="buildTitle"></p>
+    <pre><code>git clone https://github.com/gcnyin/BirdHiDPI.git
+cd BirdHiDPI
+make test
+make app
+open "dist/Bird HiDPI.app"</code></pre>
+  </section>
+
+  <section>
+    <h2 data-i18n="usageTitle"></h2>
+    <ol style="padding-left:22px; color:var(--fg)">
+      <li data-i18n="u1"></li>
+      <li data-i18n="u2"></li>
+      <li data-i18n="u3"></li>
+      <li data-i18n="u4"></li>
+      <li data-i18n="u5"></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2 data-i18n="privacyTitle"></h2>
+    <p data-i18n="privacy"></p>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span data-i18n="footer"></span>
+    <a href="https://github.com/gcnyin/BirdHiDPI">GitHub</a> ·
+    <a href="https://github.com/gcnyin/BirdHiDPI/releases" data-i18n="releases"></a> ·
+    <a href="https://github.com/gcnyin/BirdHiDPI/blob/main/LICENSE">MIT License</a>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+  "en":{
+    tag:"A lightweight native macOS menu bar utility for selecting HiDPI modes on a real external display.",
+    intro:"Bird HiDPI lets you choose HiDPI modes that WindowServer already provides for your real external display but that System Settings may not expose. For example, selecting 1920\u00d71080 HiDPI on a native 2560\u00d71440 panel makes WindowServer render a 3840\u00d72160 framebuffer and downsample it to the physical panel \u2014 no virtual display, no EDID changes, no extra permissions.",
+    warnTitle:"Heads up:",warn:"This project relies on private macOS SkyLight APIs. A system update may break the app, and it isn\u2019t suitable for Mac App Store distribution. Save your work before switching display modes.",
+    featuresTitle:"Features",
+    f1:"Switches modes directly on the same physical display ID \u2014 no virtual or mirrored display.",
+    f2:"Separates Standard and HiDPI modes; shows both logical resolution and framebuffer size.",
+    f3:"Lists only desktop-usable resolutions matching the panel\u2019s native aspect ratio.",
+    f4:"Tries to preserve the current refresh rate and pixel encoding.",
+    f5:"Verifies framebuffer, online display set and arrangement; restores immediately on failure.",
+    f6:"Restores the pre-app mode on Restore, quit, or normal session end.",
+    f7:"No display override installed, no EDID change, no admin or Screen Recording permission.",
+    f8:"Supports 11 languages with automatic system language matching.",
+    shotTitle:"Screenshot",shotDesc:"The menu bar popover listing Standard and HiDPI modes for an external display.",
+    howTitle:"How it works",
+    howP1:"The app reads the complete mode table via SkyLight\u2019s CGSGetNumberOfDisplayModes and CGSGetDisplayModeDescriptionOfLength, then calls CGSConfigureDisplayMode by mode number inside a CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration transaction on the original physical display.",
+    howP2:"The switch uses CoreGraphics .forSession scope. It creates no second display, starts no ScreenCaptureKit stream, and writes nothing to /Library/Displays.",
+    reqTitle:"Requirements",
+    r1t:"macOS",r1d:"macOS 13 Ventura or later, at least one real external display.",
+    r2t:"From source",r2d:"Xcode Command Line Tools, only when building from source.",
+    langLabel:"Languages:",
+    installTitle:"Installation",
+    installRel:"Install the latest Bird-HiDPI-<version>-macos.zip from GitHub Releases. Move Bird HiDPI.app to Applications. If macOS can\u2019t verify the developer on first launch, Control-click the app in Finder and choose Open.",
+    buildTitle:"Or build from source:",
+    usageTitle:"Usage",
+    u1:"Click the display icon in the menu bar.",
+    u2:"Turn HiDPI on or off.",
+    u3:"Select a target logical resolution from the complete list.",
+    u4:"Click Apply. You can still switch modes directly while active.",
+    u5:"Click Restore to return to the mode active before the app started.",
+    privacyTitle:"Privacy",
+    privacy:"No network functionality, no telemetry. Only the last selected mode per display and the language preference are stored in local UserDefaults.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Releases"
+  },
+  "zh-CN":{
+    tag:"轻量的原生 macOS 菜单栏工具，用于在真实外接显示器上选择 HiDPI 模式。",
+    intro:"Bird HiDPI 让你选择 WindowServer 已为真实外接显示器提供、但系统设置可能没有展示的 HiDPI 模式。例如，在原生 2560\u00d71440 面板上选择 1920\u00d71080 HiDPI 时，WindowServer 会以 3840\u00d72160 framebuffer 渲染并缩采样至物理面板——不创建虚拟显示器、不修改 EDID、不需要额外权限。",
+    warnTitle:"注意：",warn:"本项目依赖 macOS 私有 SkyLight API。系统更新可能导致功能失效，且不适合上架 Mac App Store。切换显示模式前请保存正在进行的工作。",
+    featuresTitle:"特性",
+    f1:"在同一物理显示器 ID 上直接切换，不创建虚拟显示器或镜像桌面。",
+    f2:"分开展示标准与 HiDPI 模式，并列出逻辑分辨率与 framebuffer 尺寸。",
+    f3:"只展示与面板原生宽高比匹配、可作为桌面模式使用的分辨率。",
+    f4:"尽量保持当前刷新率与像素编码。",
+    f5:"切换后验证 framebuffer、在线显示器集合和排列，失败时立即恢复。",
+    f6:"点击恢复、退出应用或正常结束会话时恢复启动前的显示模式。",
+    f7:"不安装显示器 override，不修改 EDID，无需管理员或屏幕录制权限。",
+    f8:"支持 11 种语言，并自动匹配系统语言。",
+    shotTitle:"应用截图",shotDesc:"菜单栏中列出外接显示器标准与 HiDPI 模式的浮窗。",
+    howTitle:"工作原理",
+    howP1:"应用通过 SkyLight 的 CGSGetNumberOfDisplayModes 与 CGSGetDisplayModeDescriptionOfLength 读取完整 mode 表，再在 CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration 事务中按 mode number 调用 CGSConfigureDisplayMode 切换原物理显示器。",
+    howP2:"切换使用 CoreGraphics .forSession 范围。不创建第二个显示器、不启动 ScreenCaptureKit 流，也不写入 /Library/Displays。",
+    reqTitle:"系统要求",
+    r1t:"macOS",r1d:"macOS 13 Ventura 或更高版本，至少一台真实外接显示器。",
+    r2t:"从源码构建",r2d:"Xcode Command Line Tools（仅从源码构建时需要）。",
+    langLabel:"语言：",
+    installTitle:"安装",
+    installRel:"从 GitHub Releases 下载最新的 Bird-HiDPI-<版本>-macos.zip，将 Bird HiDPI.app 移入“应用程序”。首次启动若 macOS 无法验证开发者，请在 Finder 中按住 Control 点击应用并选择“打开”。",
+    buildTitle:"或从源码构建：",
+    usageTitle:"使用",
+    u1:"点击菜单栏中的显示器图标。",
+    u2:"打开或关闭 HiDPI 开关。",
+    u3:"在完整列表中选择目标逻辑分辨率。",
+    u4:"点击“应用”。启用后可继续直接切换模式。",
+    u5:"点击“恢复”返回应用启动前的显示模式。",
+    privacyTitle:"隐私",
+    privacy:"无网络功能、不收集任何遥测数据，仅在本地 UserDefaults 中存储每个显示器上次选择的输出模式和语言偏好。",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Releases 发布"
+  },
+  "zh-TW":{
+    tag:"輕量的原生 macOS 選單列工具，用於在真實外接顯示器上選擇 HiDPI 模式。",
+    intro:"Bird HiDPI 讓你選擇 WindowServer 已為真實外接顯示器提供、但系統設定可能未展示的 HiDPI 模式。例如在原生 2560\u00d71440 面板上選擇 1920\u00d71080 HiDPI，WindowServer 會以 3840\u00d72160 framebuffer 繪製再縮取樣至實體面板——不建立虛擬顯示器、不修改 EDID、不需額外權限。",
+    warnTitle:"注意：",warn:"本計畫依賴 macOS 私有 SkyLight API。系統更新可能造成功能失效，且不適合上架 Mac App Store。切換顯示模式前請先儲存進行中的工作。",
+    featuresTitle:"特性",
+    f1:"在同一實體顯示器 ID 上直接切換，不建立虛擬或鏡像顯示器。",
+    f2:"分開顯示標準與 HiDPI 模式，並列出邏輯解析度與 framebuffer 尺寸。",
+    f3:"僅顯示與面板原生寬高比相符、可作為桌面模式使用的解析度。",
+    f4:"盡量保持目前更新率與像素編碼。",
+    f5:"切換後驗證 framebuffer、上線顯示器集合與排列，失敗時立即還原。",
+    f6:"點擊「回復」、退出應用或正常結束工作階段時還原啟用前的模式。",
+    f7:"不安裝顯示器 override、不修改 EDID、不需管理員或螢幕錄製權限。",
+    f8:"支援 11 種語言並自動比對系統語言。",
+    shotTitle:"應用截圖",shotDesc:"選單列中列出外接顯示器標準與 HiDPI 模式的浮窗。",
+    howTitle:"運作原理",
+    howP1:"應用透過 SkyLight 的 CGSGetNumberOfDisplayModes 與 CGSGetDisplayModeDescriptionOfLength 讀取完整 mode 表，再於 CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration 交易中依 mode number 呼叫 CGSConfigureDisplayMode 切換原實體顯示器。",
+    howP2:"切換使用 CoreGraphics .forSession 範圍，不建立第二個顯示器、不啟動 ScreenCaptureKit 串流，也不寫入 /Library/Displays。",
+    reqTitle:"系統需求",
+    r1t:"macOS",r1d:"macOS 13 Ventura 或以上，至少一台真實外接顯示器。",
+    r2t:"從原始碼建置",r2d:"Xcode Command Line Tools（僅從原始碼建置時需要）。",
+    langLabel:"語言：",
+    installTitle:"安裝",
+    installRel:"從 GitHub Releases 下載最新的 Bird-HiDPI-<版本>-macos.zip，將 Bird HiDPI.app 移入「應用程式」。首次啟動若 macOS 無法驗證開發者，請在 Finder 中按住 Control 點擊應用並選擇「打開」。",
+    buildTitle:"或從原始碼建置：",
+    usageTitle:"使用",
+    u1:"點擊選單列中的顯示器圖示。",
+    u2:"開啟或關閉 HiDPI 開關。",
+    u3:"從完整清單中選擇目標邏輯解析度。",
+    u4:"點擊「套用」。啟用後仍可直接切換模式。",
+    u5:"點擊「回復」返回應用啟用前的顯示模式。",
+    privacyTitle:"隱私",
+    privacy:"無網路功能、不收集任何遙測資料，僅在本地 UserDefaults 儲存每台顯示器上次選擇的模式與語言偏好。",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Releases 發布"
+  },
+  "fr":{
+    tag:"Un utilitaire natif léger dans la barre de menus macOS pour sélectionner des modes HiDPI sur un écran externe réel.",
+    intro:"Bird HiDPI vous permet de choisir des modes HiDPI que WindowServer fournit déjà pour votre écran externe réel, mais que les Réglages Système peuvent ne pas exposer. Par exemple, sélectionner 1920\u00d71080 HiDPI sur un panneau natif 2560\u00d71440 amène WindowServer à rendre un framebuffer 3840\u00d72160 sous-échantillonné vers le panneau \u2014 aucun écran virtuel, aucune modification d\u2019EDID, aucune autorisation supplémentaire.",
+    warnTitle:"À noter :",warn:"Ce projet s\u2019appuie sur des API privées SkyLight de macOS. Une mise à jour système peut casser l\u2019app, qui n\u2019est pas adaptée au Mac App Store. Enregistrez votre travail avant de changer de mode d\u2019affichage.",
+    featuresTitle:"Fonctionnalités",
+    f1:"Change les modes directement sur le même ID d\u2019écran physique \u2014 pas d\u2019écran virtuel ou miroir.",
+    f2:"Sépare les modes Standard et HiDPI ; affiche la résolution logique et la taille du framebuffer.",
+    f3:"Ne liste que les résolutions exploitables sur le bureau correspondant au ratio natif du panneau.",
+    f4:"Tente de préserver le taux de rafraîchissement et l\u2019encodage pixel courants.",
+    f5:"Vérifie le framebuffer, l\u2019ensemble des écrans en ligne et l\u2019agencement ; restaure immédiatement en cas d\u2019échec.",
+    f6:"Restaure le mode d\u2019origine au clic sur Restaurer, à la fermeture ou en fin normale de session.",
+    f7:"Aucun override d\u2019écran, aucune modification d\u2019EDID, ni droit admin ou d\u2019enregistrement d\u2019écran requis.",
+    f8:"Prend en charge 11 langues avec détection automatique de la langue système.",
+    shotTitle:"Capture d\u2019écran",shotDesc:"Le popover de la barre de menus listant les modes Standard et HiDPI d\u2019un écran externe.",
+    howTitle:"Fonctionnement",
+    howP1:"L\u2019app lit la table complète des modes via CGSGetNumberOfDisplayModes et CGSGetDisplayModeDescriptionOfLength de SkyLight, puis appelle CGSConfigureDisplayMode par numéro de mode dans une transaction CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration sur l\u2019écran physique d\u2019origine.",
+    howP2:"La bascule utilise la portée .forSession de CoreGraphics. Elle ne crée aucun second écran, ne lance aucun flux ScreenCaptureKit et n\u2019écrit rien dans /Library/Displays.",
+    reqTitle:"Configuration requise",
+    r1t:"macOS",r1d:"macOS 13 Ventura ou ultérieur, au moins un écran externe réel.",
+    r2t:"Depuis les sources",r2d:"Xcode Command Line Tools, uniquement pour la compilation depuis les sources.",
+    langLabel:"Langues :",
+    installTitle:"Installation",
+    installRel:"Installez le dernier Bird-HiDPI-<version>-macos.zip depuis GitHub Releases. Déplacez Bird HiDPI.app dans Applications. Si macOS ne peut vérifier le développeur au premier lancement, Control-clicquez l\u2019app dans Finder et choisissez Ouvrir.",
+    buildTitle:"Ou compilez depuis les sources :",
+    usageTitle:"Utilisation",
+    u1:"Cliquez sur l\u2019icône d\u2019écran dans la barre de menus.",
+    u2:"Activez ou désactivez HiDPI.",
+    u3:"Sélectionnez la résolution logique cible dans la liste complète.",
+    u4:"Cliquez sur Appliquer. Vous pouvez toujours basculer en mode actif.",
+    u5:"Cliquez sur Restaurer pour revenir au mode actif avant le lancement.",
+    privacyTitle:"Confidentialité",
+    privacy:"Aucune fonction réseau, aucune télémétrie. Seuls le dernier mode choisi par écran et la préférence de langue sont stockés dans UserDefaults local.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Versions"
+  },
+  "de":{
+    tag:"Ein leichtes, natives macOS-Menüleisten-Tool zum Auswählen von HiDPI-Modi an einem echten externen Display.",
+    intro:"Bird HiDPI ermöglicht die Auswahl von HiDPI-Modi, die WindowServer bereits für das echte externe Display bereitstellt, die die Systemeinstellungen aber möglicherweise nicht anzeigen. Etwa 1920\u00d71080 HiDPI auf einem nativen 2560\u00d71440-Panel führt dazu, dass WindowServer einen 3840\u00d72160-Framebuffer rendert und auf das physische Panel heruntersamplingt \u2014 kein virtuelles Display, keine EDID-Änderung, keine zusätzlichen Berechtigungen.",
+    warnTitle:"Hinweis:",warn:"Dieses Projekt nutzt private macOS-SkyLight-APIs. Ein System-Update kann die App beeinträchtigen; sie eignet sich nicht für den Mac App Store. Sichern Sie Ihre Arbeit vor dem Moduswechsel.",
+    featuresTitle:"Funktionen",
+    f1:"Wechselt Modi direkt auf derselben physischen Display-ID \u2014 kein virtuelles oder gespiegeltes Display.",
+    f2:"Trennt Standard- und HiDPI-Modi; zeigt logische Auflösung und Framebuffer-Größe.",
+    f3:"Listet nur desktop-taugliche Auflösungen passend zum nativen Seitenverhältnis des Panels.",
+    f4:"Versucht, aktuelle Bildwiederholrate und Pixelkodierung beizubehalten.",
+    f5:"Verifiziert Framebuffer, Online-Display-Set und Anordnung; stellt bei Misserfolg sofort wieder her.",
+    f6:"Stellt den App-Vormodus bei Wiederherstellen, Beenden oder normalem Sitzungsende wieder her.",
+    f7:"Kein Display-Override, keine EDID-Änderung, keine Admin- oder Bildschirmaufnahme-Berechtigung.",
+    f8:"Unterstützt 11 Sprachen mit automatischer Systemspracherkennung.",
+    shotTitle:"Screenshot",shotDesc:"Das Menüleisten-Popover mit den Standard- und HiDPI-Modi eines externen Displays.",
+    howTitle:"Funktionsweise",
+    howP1:"Die App liest die vollständige Modustabelle über SkyLights CGSGetNumberOfDisplayModes und CGSGetDisplayModeDescriptionOfLength und ruft CGSConfigureDisplayMode per Modusnummer innerhalb einer CGBeginDisplayConfiguration-/CGCompleteDisplayConfiguration-Transaktion auf dem ursprünglichen physischen Display auf.",
+    howP2:"Der Wechsel nutzt den CoreGraphics-.forSession-Geltungsbereich. Es wird kein zweites Display erstellt, kein ScreenCaptureKit-Stream gestartet und nichts nach /Library/Displays geschrieben.",
+    reqTitle:"Voraussetzungen",
+    r1t:"macOS",r1d:"macOS 13 Ventura oder neuer, mindestens ein echtes externes Display.",
+    r2t:"Aus dem Quellcode",r2d:"Xcode Command Line Tools, nur beim Bauen aus dem Quellcode.",
+    langLabel:"Sprachen:",
+    installTitle:"Installation",
+    installRel:"Installieren Sie das aktuelle Bird-HiDPI-<Version>-macos.zip von GitHub Releases. Verschieben Sie Bird HiDPI.app in Programme. Kann macOS den Entwickler beim ersten Start nicht verifizieren, Control-klicken Sie die App im Finder und wählen Sie Öffnen.",
+    buildTitle:"Oder aus dem Quellcode bauen:",
+    usageTitle:"Verwendung",
+    u1:"Klicken Sie auf das Display-Symbol in der Menüleiste.",
+    u2:"HiDPI ein- oder ausschalten.",
+    u3:"Wählen Sie die Ziellösung aus der vollständigen Liste.",
+    u4:"Auf Anwenden klicken. Auch im aktiven Zustand direkt wechselbar.",
+    u5:"Auf Wiederherstellen klicken, um zum Modus vor App-Start zurückzukehren.",
+    privacyTitle:"Datenschutz",
+    privacy:"Keine Netzwerkfunktion, keine Telemetrie. Nur der zuletzt gewählte Modus je Display und die Spracheinstellung werden lokal in UserDefaults gespeichert.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Releases"
+  },
+  "it":{
+    tag:"Un leggero strumento nativo nella barra dei menu di macOS per selezionare modalità HiDPI su uno schermo esterno reale.",
+    intro:"Bird HiDPI permette di scegliere modalità HiDPI che WindowServer già fornisce per il tuo schermo esterno reale, ma che Impostazioni di Sistema potrebbe non esporre. Ad esempio, selezionando 1920\u00d71080 HiDPI su un pannello nativo 2560\u00d71440, WindowServer renderizza un framebuffer 3840\u00d72160 sottocampionato al pannello fisico \u2014 nessuno schermo virtuale, nessuna modifica EDID, nessun permesso extra.",
+    warnTitle:"Nota:",warn:"Il progetto usa API private SkyLight di macOS. Un aggiornamento di sistema potrebbe rompere l\u2019app, non adatta al Mac App Store. Salva il lavoro prima di cambiare modalità di visualizzazione.",
+    featuresTitle:"Funzionalità",
+    f1:"Cambia modalità direttamente sullo stesso ID di schermo fisico \u2014 nessuno schermo virtuale o mirror.",
+    f2:"Separa modalità Standard e HiDPI; mostra risoluzione logica e dimensione framebuffer.",
+    f3:"Elenca solo risoluzioni desktop utilizzabili coerenti col rapporto nativo del pannello.",
+    f4:"Tenta di mantenere l\u2019attuale frequenza di aggiornamento e codifica pixel.",
+    f5:"Verifica framebuffer, set schermi online e disposizione; ripristina subito in caso di fallimento.",
+    f6:"Ripristina la modalità pre-app al clic su Ripristina, all\u2019uscita o alla fine normale della sessione.",
+    f7:"Nessun override schermo, nessuna modifica EDID, nessun permesso admin o Registrazione Schermo.",
+    f8:"Supporta 11 lingue con rilevamento automatico della lingua di sistema.",
+    shotTitle:"Screenshot",shotDesc:"Il popover della barra dei menu con le modalità Standard e HiDPI di uno schermo esterno.",
+    howTitle:"Come funziona",
+    howP1:"L\u2019app legge la tabella completa delle modalità via CGSGetNumberOfDisplayModes e CGSGetDisplayModeDescriptionOfLength di SkyLight, poi chiama CGSConfigureDisplayMode per numero di modalità dentro una transazione CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration sullo schermo fisico originale.",
+    howP2:"Il cambio usa l\u2019ambito .forSession di CoreGraphics. Non crea un secondo schermo, non avvia stream ScreenCaptureKit, non scrive in /Library/Displays.",
+    reqTitle:"Requisiti",
+    r1t:"macOS",r1d:"macOS 13 Ventura o successivo, almeno uno schermo esterno reale.",
+    r2t:"Da sorgente",r2d:"Xcode Command Line Tools, solo per la compilazione da sorgente.",
+    langLabel:"Lingue:",
+    installTitle:"Installazione",
+    installRel:"Installa l\u2019ultimo Bird-HiDPI-<versione>-macos.zip da GitHub Releases. Sposta Bird HiDPI.app in Applicazioni. Se macOS non verifies lo sviluppatore al primo avvio, Control-clic sull\u2019app nel Finder e scegli Apri.",
+    buildTitle:"Oppure compila da sorgente:",
+    usageTitle:"Uso",
+    u1:"Clicca sull\u2019icona schermo nella barra dei menu.",
+    u2:"Attiva o disattiva l\u2019interruttore HiDPI.",
+    u3:"Seleziona la risoluzione logica target dalla lista completa.",
+    u4:"Clic Applica. Anche da attivo puoi cambiare modalità direttamente.",
+    u5:"Clic Ripristina per tornare alla modalità precedente all\u2019avvio.",
+    privacyTitle:"Privacy",
+    privacy:"Nessuna funzionalità di rete, nessuna telemetria. Solo l\u2019ultima modalità scelta per schermo e la preferenza lingua sono salvate localmente in UserDefaults.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Rilasci"
+  },
+  "es":{
+    tag:"Una utilidad ligera y nativa en la barra de menú de macOS para seleccionar modos HiDPI en una pantalla externa real.",
+    intro:"Bird HiDPI permite elegir modos HiDPI que WindowServer ya proporciona para tu pantalla externa real pero que Ajustes del Sistema podría no exponer. Por ejemplo, seleccionar 1920\u00d71080 HiDPI en un panel nativo 2560\u00d71440 hace que WindowServer renderice un framebuffer 3840\u00d72160 y lo submuestree al panel físico \u2014 sin pantalla virtual, sin cambios de EDID, sin permisos extra.",
+    warnTitle:"Atención:",warn:"El proyecto depende de APIs privadas SkyLight de macOS. Una actualización del sistema podría romper la app, no apta para el Mac App Store. Guarda tu trabajo antes de cambiar de modo de pantalla.",
+    featuresTitle:"Características",
+    f1:"Cambia modos directamente en el mismo ID de pantalla física \u2014 sin pantalla virtual ni espejo.",
+    f2:"Separa modos Estándar y HiDPI; muestra resolución lógica y tamaño de framebuffer.",
+    f3:"Lista solo resoluciones usables de escritorio que coinciden con la relación de aspecto nativa del panel.",
+    f4:"Intenta mantener la tasa de refresco y codificación de píxel actuales.",
+    f5:"Verifica framebuffer, conjunto de pantallas en línea y disposición; restaura al instante si falla.",
+    f6:"Restaura el modo previo al pulsar Restaurar, al salir o al finalizar la sesión normalmente.",
+    f7:"Sin override de pantalla, sin cambio de EDID, sin permiso de admin ni grabación de pantalla.",
+    f8:"Soporta 11 idiomas con detección automática del idioma del sistema.",
+    shotTitle:"Captura",shotDesc:"El popover de la barra de menú con los modos Estándar y HiDPI de una pantalla externa.",
+    howTitle:"Cómo funciona",
+    howP1:"La app lee la tabla completa de modos vía CGSGetNumberOfDisplayModes y CGSGetDisplayModeDescriptionOfLength de SkyLight, luego llama a CGSConfigureDisplayMode por número de modo dentro de una transacción CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration en la pantalla física original.",
+    howP2:"El cambio usa el ámbito .forSession de CoreGraphics. No crea una segunda pantalla, no inicia un flujo ScreenCaptureKit y no escribe en /Library/Displays.",
+    reqTitle:"Requisitos",
+    r1t:"macOS",r1d:"macOS 13 Ventura o posterior, al menos una pantalla externa real.",
+    r2t:"Desde el código",r2d:"Xcode Command Line Tools, solo al compilar desde el código fuente.",
+    langLabel:"Idiomas:",
+    installTitle:"Instalación",
+    installRel:"Instala el último Bird-HiDPI-<versión>-macos.zip desde GitHub Releases. Mueve Bird HiDPI.app a Aplicaciones. Si macOS no puede verificar al desarrollador en el primer arranque, Control-clic en la app en Finder y elige Abrir.",
+    buildTitle:"O compila desde el código:",
+    usageTitle:"Uso",
+    u1:"Clic en el icono de pantalla de la barra de menú.",
+    u2:"Activa o desactiva HiDPI.",
+    u3:"Selecciona la resolución lógica objetivo de la lista completa.",
+    u4:"Clic en Aplicar. Sigue pudiendo cambiar de modo directamente mientras esté activo.",
+    u5:"Clic en Restaurar para volver al modo anterior al inicio de la app.",
+    privacyTitle:"Privacidad",
+    privacy:"Sin funciones de red, sin telemetría. Solo el último modo elegido por pantalla y la preferencia de idioma se almacenan en UserDefaults local.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Versiones"
+  },
+  "pt":{
+    tag:"Um utilitário leve e nativo na barra de menus do macOS para selecionar modos HiDPI num ecrã externo real.",
+    intro:"O Bird HiDPI permite escolher modos HiDPI que o WindowServer já fornece para o seu ecrã externo real, mas que os Definições do Sistema poderão não expor. Por exemplo, selecionar 1920\u00d71080 HiDPI num painel nativo 2560\u00d71440 faz o WindowServer renderizar um framebuffer 3840\u00d72160 e subamostrá-lo ao painel físico \u2014 sem ecrã virtual, sem alteração de EDID, sem permissões extra.",
+    warnTitle:"Atenção:",warn:"O projeto depende de APIs privadas SkyLight do macOS. Uma atualização do sistema pode quebrar a app, não sendo adequada para a Mac App Store. Guarde o trabalho antes de mudar de modo de ecrã.",
+    featuresTitle:"Funcionalidades",
+    f1:"Muda modos diretamente no mesmo ID de ecrã físico \u2014 sem ecrã virtual nem espelho.",
+    f2:"Separa modos Padrão e HiDPI; mostra resolução lógica e tamanho do framebuffer.",
+    f3:"Lista apenas resoluções utilizáveis no ambiente de trabalho que correspondem à proporção nativa do painel.",
+    f4:"Tenta manter a taxa de atualização e a codificação de pixel atuais.",
+    f5:"Verifica framebuffer, conjunto de ecrãs online e disposição; restaura imediatamente em caso de falha.",
+    f6:"Restaura o modo pré-app ao clicar em Restaurar, ao sair ou ao terminar a sessão normalmente.",
+    f7:"Sem override de ecrã, sem alteração de EDID, sem permissão de admin nem de gravação de ecrã.",
+    f8:"Suporta 11 idiomas com deteção automática do idioma do sistema.",
+    shotTitle:"Captura",shotDesc:"O popover da barra de menus com os modos Padrão e HiDPI de um ecrã externo.",
+    howTitle:"Como funciona",
+    howP1:"A app lê a tabela completa de modos via CGSGetNumberOfDisplayModes e CGSGetDisplayModeDescriptionOfLength do SkyLight, depois chama CGSConfigureDisplayMode por número de modo dentro de uma transação CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration no ecrã físico original.",
+    howP2:"A mudança usa o âmbito .forSession do CoreGraphics. Não cria um segundo ecrã, não inicia um fluxo ScreenCaptureKit nem escreve em /Library/Displays.",
+    reqTitle:"Requisitos",
+    r1t:"macOS",r1d:"macOS 13 Ventura ou posterior, pelo menos um ecrã externo real.",
+    r2t:"Do código",r2d:"Xcode Command Line Tools, apenas ao compilar do código-fonte.",
+    langLabel:"Idiomas:",
+    installTitle:"Instalação",
+    installRel:"Instale o último Bird-HiDPI-<versão>-macos.zip dos GitHub Releases. Mova Bird HiDPI.app para Aplicações. Se o macOS não conseguir verificar o programador no primeiro arranque, Control-clique na app no Finder e escolha Abrir.",
+    buildTitle:"Ou compile do código-fonte:",
+    usageTitle:"Utilização",
+    u1:"Clique no ícone de ecrã na barra de menus.",
+    u2:"Ative ou desative o interruptor HiDPI.",
+    u3:"Selecione a resolução lógica de destino da lista completa.",
+    u4:"Clique em Aplicar. Pode continuar a mudar de modo diretamente enquanto ativo.",
+    u5:"Clique em Restaurar para regressar ao modo ativo antes do início da app.",
+    privacyTitle:"Privacidade",
+    privacy:"Sem funcionalidade de rede, sem telemetria. Apenas o último modo escolhido por ecrã e a preferência de idioma são guardados localmente em UserDefaults.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Lançamentos"
+  },
+  "sv":{
+    tag:"Ett lätt inbyggt verktyg i macOS menyrad för att välja HiDPI-lägen på en riktig extern skärm.",
+    intro:"Bird HiDPI låter dig välja HiDPI-lägen som WindowServer redan tillhandahåller för din riktiga externa skärm, men som Systeminställningar kanske inte visar. Till exempel gör 1920\u00d71080 HiDPI på en inbyggd 2560\u00d71440-panel att WindowServer renderar en 3840\u00d72160 framebuffer och nedsamplar till den fysiska panelen \u2014 ingen virtuell skärm, ingen EDID-ändring, inga extra behörigheter.",
+    warnTitle:"Observera:",warn:"Projektet bygger på privata macOS SkyLight-API:er. En systemuppdatering kan bryta appen, som inte lämpar sig för Mac App Store. Spara ditt arbete innan du byter visningsläge.",
+    featuresTitle:"Funktioner",
+    f1:"Byter lägen direkt på samma fysiska skärm-ID \u2014 ingen virtuell eller speglad skärm.",
+    f2:"Skiljer Standard- och HiDPI-lägen; visar logisk upplösning och framebufferstorlek.",
+    f3:"Listar bara skrivbordsanvändbara upplösningar som matchar panelens ursprungliga bildförhållande.",
+    f4:"Försöker bevara aktuell uppdateringsfrekvens och pixelkodning.",
+    f5:"Verifierar framebuffer, uppsättning online-skärmar och arrangemang; återställer omedelbart vid fel.",
+    f6:"Återställer läget före appen vid Återställ, avslut eller normalt sessionsavslut.",
+    f7:"Ingen skärm-override, ingen EDID-ändring, inga admin- eller skärminspelningsbehörigheter.",
+    f8:"Stöder 11 språk med automatisk systemspråksmatchning.",
+    shotTitle:"Skärmdump",shotDesc:"Menyradens popover som listar Standard- och HiDPI-lägen för en extern skärm.",
+    howTitle:"Så funkar det",
+    howP1:"Appen läser hela lägestabellen via SkyLights CGSGetNumberOfDisplayModes och CGSGetDisplayModeDescriptionOfLength, anropar sedan CGSConfigureDisplayMode per lägesnummer i en CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration-transaktion på den ursprungliga fysiska skärmen.",
+    howP2:"Bytet använder CoreGraphics .forSession-omfång. Ingen andra skärm skapas, ingen ScreenCaptureKit-ström startas, inget skrivs till /Library/Displays.",
+    reqTitle:"Krav",
+    r1t:"macOS",r1d:"macOS 13 Ventura eller senare, minst en riktig extern skärm.",
+    r2t:"Från källkod",r2d:"Xcode Command Line Tools, endast vid bygge från källkod.",
+    langLabel:"Språk:",
+    installTitle:"Installation",
+    installRel:"Installera senaste Bird-HiDPI-<version>-macos.zip från GitHub Releases. Flytta Bird HiDPI.app till Program. Om macOS inte kan verifiera utvecklaren vid första starten, Control-klicka appen i Finder och välj Öppna.",
+    buildTitle:"Eller bygg från källkod:",
+    usageTitle:"Användning",
+    u1:"Klicka på skärmikonen i menyraden.",
+    u2:"Slå på eller av HiDPI.",
+    u3:"Välj målupplösning (logisk) från hela listan.",
+    u4:"Klicka Verkställ. Du kan fortfarande byta läge direkt när aktiv.",
+    u5:"Klicka Återställ för att återvända till läget före appen startade.",
+    privacyTitle:"Integritet",
+    privacy:"Inga nätverksfunktioner, ingen telemetri. Endast det senast valda läget per skärm och språkinställningen sparas lokalt i UserDefaults.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Releaser"
+  },
+  "nb":{
+    tag:"Et lett, innebygd verktøy i macOS-menylinja for å velge HiDPI-moduser på en ekstern skjerm.",
+    intro:"Bird HiDPI lar deg velge HiDPI-moduser som WindowServer allerede tilbyr for den eksterne skjermen din, men som Systeminnstillinger kanskje ikke viser. For eksempel gir 1920\u00d71080 HiDPI på et panel med 2560\u00d71440 nativ oppløsning at WindowServer rendrer en 3840\u00d72160-framebuffer og nedsampler til panelet \u2014 ingen virtuell skjerm, ingen EDID-endring, ingen ekstra tillatelser.",
+    warnTitle:"Merk:",warn:"Prosjektet er avhengig av private macOS SkyLight-API-er. En systemoppdatering kan ødelegge appen, som ikke er beregnet for Mac App Store. Lagre arbeidet ditt før du bytter skjermmodus.",
+    featuresTitle:"Funksjoner",
+    f1:"Bytter modus direkte på samme fysiske skjerm-ID \u2014 ingen virtuell eller speilet skjerm.",
+    f2:"Skiller standard- og HiDPI-moduser; viser logisk oppløsning og framebuffer-størrelse.",
+    f3:"Lister kun skrivebordsbrukbare oppløsninger som matcher panelets opprinnelige bildeforhold.",
+    f4:"Forsøker å bevare gjeldende oppdateringsfrekvens og pikselkoding.",
+    f5:"Verifiserer framebuffer, online skjermsett og oppsett; gjenoppretter umiddelbart ved feil.",
+    f6:"Gjenoppretter pre-app-modus ved Gjenopprett, avslutt eller normal sesjonsavslutning.",
+    f7:"Ingen skjerm-override, ingen EDID-endring, ingen admin- eller skjermopptakstillatelse.",
+    f8:"Støtter 11 språk med automatisk systemspråkmatching.",
+    shotTitle:"Skjermbilde",shotDesc:"Menylinjens popover som lister standard- og HiDPI-moduser for en ekstern skjerm.",
+    howTitle:"Slik fungerer det",
+    howP1:"Appen leser hele modustabellen via SkyLights CGSGetNumberOfDisplayModes og CGSGetDisplayModeDescriptionOfLength, og kaller deretter CGSConfigureDisplayMode etter modusnummer i en CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration-transaksjon på den opprinnelige fysiske skjermen.",
+    howP2:"Byttet bruker CoreGraphics .forSession-omfang. Den oppretter ingen extra skjerm, starter ingen ScreenCaptureKit-strøm og skriver ingenting til /Library/Displays.",
+    reqTitle:"Krav",
+    r1t:"macOS",r1d:"macOS 13 Ventura eller nyere, minst en ekstern skjerm.",
+    r2t:"Fra kildekode",r2d:"Xcode Command Line Tools, kun ved bygging fra kildekode.",
+    langLabel:"Språk:",
+    installTitle:"Installasjon",
+    installRel:"Installer nyeste Bird-HiDPI-<versjon>-macos.zip fra GitHub Releases. Flytt Bird HiDPI.app til Programmer. Hvis macOS ikke kan bekrefte utvikleren ved første oppstart, Control-klikk appen i Finder og velg Åpne.",
+    buildTitle:"Eller bygg fra kildekode:",
+    usageTitle:"Bruk",
+    u1:"Klikk på skjermikonet i menylinja.",
+    u2:"Slå HiDPI av eller på.",
+    u3:"Velg mål-oppløsning (logisk) fra hele listen.",
+    u4:"Klikk Bruk. Du kan fortsatt bytte modus direkte når aktiv.",
+    u5:"Klikk Gjenopprett for å gå tilbake til modusen før appen startet.",
+    privacyTitle:"Personvern",
+    privacy:"Ingen nettverksfunksjon, ingen telemetri. Kun sist valgte modus per skjerm og språkpreferansen lagres lokalt i UserDefaults.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Utgivelser"
+  },
+  "ga":{
+    tag:"Áis dhúchais éadrom i mbarra roghchlár macOS chun módanna HiDPI a roghnú ar scáileán eachtrach iarbhír.",
+    intro:"Le Bird HiDPI is féidir módanna HiDPI a roghnú a chuireann WindowServer ar fáil cheana do do scáileán eachtrach iarbhír, ach b'fhéidir nach nochtfaidh Socruithe an Chórais iad. Mar shampla, 1920\u00d71080 HiDPI a roghnú ar phainéal dúchasach 2560\u00d71440 rinne WindowServer framebuffer 3840\u00d72160 a rindreáil agus é a bhfosampláil go dtí an painéal fisiceach \u2014 gan scáileán fíorúil, gan athrú EDID, gan ceadanna breise.",
+    warnTitle:"Tabhair faoi deara:",warn:"Braitheann an tionscadal ar APIanna príobháideacha SkyLight macOS. D'fhéadfadh nuashonrú córais an aip a mhilleadh, agus níl sé oiriúnach don Mac App Store. Sábháil do shaothar sula n-athraíonn tú mód an scáileáin.",
+    featuresTitle:"Gnéithe",
+    f1:"Athraíonn módanna go díreach ar an aonaithe aitheantais scáileáin fisicigh chéanna \u2014 gan scáileán fíorúil nó scáthánaithe.",
+    f2:"Scarann modhanna Caighdeánach agus HiDPI; taispeánann réiteach loighciúil agus méid framebuffer.",
+    f3:"Ní liostaíonn ach réitigh inúsáidte deisce a mheaitseann cóimheas gné dhúchasach an phainéil.",
+    f4:"Déanann iarracht an ráta athnuachana agus ionchódú picteilíní reatha a chaomhnú.",
+    f5:"Fíoraíonn framebuffer, an tacar scáileán ar líne agus leagan amach; athchúplaíonn láithreach ar theip.",
+    f6:"Athchúplaíonn mód roimh-an aip ar Athchúplaigh, scortha nó deireadh gnáth an tseisiúin.",
+    f7:"Gan sáraíoht scáileán, gan athrú EDID, gan cead riarthóra nó Taifeadadh Scáileáin.",
+    f8:"Tacaíonn sé le 11 theanga le meaitseáil uathoibríoch teanga an chórais.",
+    shotTitle:"Gléas scáileáin",shotDesc:"Popover an bharra roghchláir a liostaíonn modhanna Caighdeánach agus HiDPI do scáileán eachtrach.",
+    howTitle:"Conas a oibríonn sé",
+    howP1:"Léann an t-aip an tábla iomlán modhanna trí CGSGetNumberOfDisplayModes agus CGSGetDisplayModeDescriptionOfLength SkyLight, ansin glaonn CGSConfigureDisplayMode de réir uimhir mhód laistigh d'idirbheart CGBeginDisplayConfiguration / CGCompleteDisplayConfiguration ar an scáileán fisiceach bunaidh.",
+    howP2:"Úsáideann an malartú scóip .forSession CoreGraphics. Ní chruthaítear dara scáileán, ní thosaítear sruth ScreenCaptureKit, agus ní scríobhtar aon rud i /Library/Displays.",
+    reqTitle:"Riachtanais",
+    r1t:"macOS",r1d:"macOS 13 Ventura nó níos déanaí, scáileán eachtrach iarbhír amháin ar a laghad.",
+    r2t:"Ón bhfoinse",r2d:"Uirlisí Líne Ordaithe Xcode, ach amháin ag tógáil ón bhfoinse.",
+    langLabel:"Teangacha:",
+    installTitle:"Suiteáil",
+    installRel:"Suiteáil an Bird-HiDPI-<leagan>-macos.zip is déanaí ó GitHub Releases. Bog Bird HiDPI.app go Feidhmchláir. Mura bhfuil macOS in ann an forbróir a fhíorú ag an gcéad tosú, Control-cliceáil an t-aip i Finder agus roghnaigh Oscail.",
+    buildTitle:"Nó tóg ón bhfoinse:",
+    usageTitle:"Úsáid",
+    u1:"Cliceáil ar deilbhín an scáileáin sa bharra roghchláir.",
+    u2:"Cas HiDPI ar as.",
+    u3:"Roghnaigh réiteach loighciúil sprice ón liosta iomlán.",
+    u4:"Cliceáil Cuir i bhFeidhm. Is féidir módanna a athrú go díreach fós agus tú gníomhach.",
+    u5:"Cliceáil Athchúplaigh chun filleadh ar an mód roimh thosachú an aip.",
+    privacyTitle:"Príobháideacht",
+    privacy:"Gan feidhmiúlacht líonra, gan te Kliméitreá. Ní stóráiltear ach an mód roghnaithe is déanaí in aghaidh an scáileáin agus tosaíocht na teanga i UserDefaults logánta.",
+    footer:"\u00a9 Bird HiDPI \u00b7",
+    releases:"Eisiúintí"
+  }
+};
+
+function applyLang(lang){
+  const dict = I18N[lang] || I18N.en;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k = el.getAttribute("data-i18n");
+    if(dict[k]!==undefined) el.textContent = dict[k];
+  });
+  document.documentElement.lang = lang;
+  document.querySelectorAll("#langbar button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.lang===lang);
+  });
+  try{ localStorage.setItem("birdhidpi-lang", lang); }catch(e){}
+}
+
+const nav = navigator.language || "en";
+let initLang = "en";
+const match = Object.keys(I18N).find(l=> nav.toLowerCase().startsWith(l.toLowerCase()));
+if(match) initLang = match;
+try{ const saved = localStorage.getItem("birdhidpi-lang"); if(saved && I18N[saved]) initLang = saved; }catch(e){}
+applyLang(initLang);
+
+document.getElementById("langbar").addEventListener("click", e=>{
+  if(e.target.matches("button[data-lang]")) applyLang(e.target.dataset.lang);
+});
+</script>
+</body>
+</html>
