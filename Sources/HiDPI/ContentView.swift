@@ -276,7 +276,7 @@ struct ContentView: View {
                         localizationSettings.language = language
                     } label: {
                         if localizationSettings.language == language {
-                            Label(language.displayName, systemImage: "checkmark")
+                            Text(language.displayName + "  ✓")
                         } else {
                             Text(language.displayName)
                         }
