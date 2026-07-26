@@ -133,13 +133,13 @@
   }
   .warn b{color:#f4c95d}
 
-  .shot-wrap{perspective:1400px}
+  .shot-wrap{max-width:720px; margin:0 auto}
   .shot{
     border:1px solid var(--border); border-radius:16px; overflow:hidden;
     background:var(--panel); box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 60px rgba(78,161,255,.15);
-    transform-style:preserve-3d; transition:transform .15s ease-out; backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
   }
-  .shot img{width:100%; display:block; transform:translateZ(40px)}
+  .shot img{width:100%; display:block}
   .shot::after{
     content:""; position:absolute; inset:0; pointer-events:none;
     background:linear-gradient(140deg,rgba(255,255,255,.08),transparent 40%);
@@ -734,16 +734,6 @@ const io = new IntersectionObserver(entries=>{
 }, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
-/* screenshot parallax tilt */
-const shot = document.getElementById("shot");
-const shotWrap = shot.parentElement;
-shotWrap.addEventListener("mousemove", e=>{
-  const r = shotWrap.getBoundingClientRect();
-  const rx = ((e.clientY - r.top)/r.height - .5) * -8;
-  const ry = ((e.clientX - r.left)/r.width - .5) * 10;
-  shot.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-});
-shotWrap.addEventListener("mouseleave", ()=> shot.style.transform = "" );
 </script>
 </body>
 </html>
