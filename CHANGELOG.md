@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-07-26
+
+### Changed
+
+- Compacted the main UI and moved per-display apply actions into each display's header.
+
 ## [1.0.2] - 2026-07-22
 
 ### Changed
